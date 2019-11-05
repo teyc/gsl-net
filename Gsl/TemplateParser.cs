@@ -50,14 +50,14 @@ namespace Gsl
                 if (posLeft != -1)
                 {
                     var posRight = line.IndexOf("}", posLeft);
-                    if (posStart < posLeft) tokens.Add(new StringToken(line.Substring(posStart, posLeft - posStart)));
-                    tokens.Add(new ExpressionToken(line.Substring(posLeft + 2, posRight - (posLeft + 2))));
+                    if (posStart < posLeft) tokens.Add(new StringToken(line[posStart..posLeft]));
+                    tokens.Add(new ExpressionToken(line[(posLeft + 2)..posRight]));
                     posStart = posRight + 1;
                 }
                 else
                     break;
             }
-            tokens.Add(new StringToken(line.Substring(posStart, line.Length - posStart)));
+            tokens.Add(new StringToken(line[posStart..]));
             return tokens.ToArray();
         }
 
