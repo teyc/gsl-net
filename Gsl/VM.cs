@@ -10,10 +10,10 @@ namespace Gsl
     {
         private const string NONAME = "__.__.__";
         private readonly Dictionary<int, string> _alignments = new Dictionary<int, string>();
-        private readonly Dictionary<string, IFileInfo> _files = new Dictionary<string, IFileInfo>();
+        private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
-        private IFileInfo _currentOutputFile;
+        private OutputBuffer _currentOutputFile;
 
         public VM(IFileSystem fileSystem, ILogger logger)
         {
@@ -26,29 +26,27 @@ namespace Gsl
             using var scope = logger.BeginScope(nameof(SetOutput));
 
             var fileInfo = GetCurrentOutputFile();
-            if (fileInfo.Name == NONAME)
+            if (fileInfo.Filename == NONAME)
             {
                 fileSystem.File.Move(NONAME, filename);
-                _currentOutputFile = _files[filename] = fileSystem.FileInfo.FromFileName(filename);
+                _currentOutputFile = _files[filename] = new OutputBuffer(filename);
                 _files.Remove(NONAME);
             }
             else
             {
-                _files[filename] = fileSystem.FileInfo.FromFileName(filename);
+                _files[filename] = new OutputBuffer(filename);
             }
 
         }
 
         public void WriteLine(object output)
         {
-            using var s = _currentOutputFile.AppendText();
-            s.WriteLine(output);
+            _currentOutputFile.WriteLine(output.ToString());
         }
 
         public void WriteLineAligned(int alignmentId, string output)
         {
-            using var s = _currentOutputFile.AppendText();
-            s.WriteLine(output);
+            _currentOutputFile.WriteAligned(alignmentId, output);
         }
 
         public void SetAlignment(int alignmentId, string alignmentMarkers)
@@ -56,13 +54,13 @@ namespace Gsl
             _alignments[alignmentId] = alignmentMarkers;
         }
 
-        private IFileInfo GetCurrentOutputFile()
+        private OutputBuffer GetCurrentOutputFile()
         {
             using var scope = logger.BeginScope(nameof(GetCurrentOutputFile));
 
             if (_currentOutputFile != null) return _currentOutputFile;
 
-            _currentOutputFile = _files.FirstOrDefault(f => f.Value.Name == NONAME).Value;
+            _currentOutputFile = _files.FirstOrDefault(f => f.Value.Filename == NONAME).Value;
             if (_currentOutputFile != null) return _currentOutputFile;
 
             if (!fileSystem.File.Exists(NONAME))
@@ -72,7 +70,7 @@ namespace Gsl
                 file.Write("");
                 file.Close();
             }
-            _currentOutputFile = _files[NONAME] = fileSystem.FileInfo.FromFileName(NONAME);
+            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME);
             return _currentOutputFile;
 
         }
@@ -81,7 +79,16 @@ namespace Gsl
         {
             using var scope = logger.BeginScope(nameof(GetOutputFiles));
 
-            return _files.Values.Cast<IFileInfo>().ToArray();
+            return _files.Values.Cast<OutputBuffer>().Select(ToFileInfo).ToArray();
+        }
+
+        IFileInfo ToFileInfo(OutputBuffer buffer)
+        {
+            buffer.Close();
+            var fileInfo = fileSystem.FileInfo.FromFileName(buffer.Filename);
+            using (var outputStream = fileSystem.File.CreateText(buffer.Filename))
+                outputStream.Write(buffer.GetBuffer());
+            return fileInfo;
         }
     }
 

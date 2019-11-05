@@ -13,11 +13,11 @@ namespace Gsl.Tests
 {
     public class AlignmentTest
     {
-        private ITestOutputHelper _log;
+        private readonly ITestOutputHelper _log;
 
         public AlignmentTest(ITestOutputHelper log)
         {
-            this._log = log;
+            _log = log;
         }
 
         [Fact]
@@ -36,12 +36,13 @@ namespace Gsl.Tests
                 new FileInfoWrapper(fileSystem, new FileInfo(DataFile(template))), 
                 new FileInfoWrapper(fileSystem, new FileInfo(DataFile(data))));
 
-            outputFiles.ToList().ForEach(f =>   _log.WriteLine(f.Name));
+            outputFiles.ToList().ForEach(f =>  _log.WriteLine(f.Name));
             var outputFile = outputFiles[0];
 
             using var stream = outputFile.OpenText();            
             var outputContents = stream.ReadToEnd();
-            _log.WriteLine(File.ReadAllText(DataFile(expected)));
+
+            _log.WriteLine(outputContents);
             Assert.Equal(File.ReadAllText(DataFile(expected)), outputContents);
             
         }
