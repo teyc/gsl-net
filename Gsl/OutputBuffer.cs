@@ -70,7 +70,7 @@ namespace Gsl
 
             private static string CreateFormatString(int[] widths)
             {
-                var elements = widths.Select((width, index) => "{" + index + ":" + width + "}");
+                var elements = widths.Select((width, index) => "{" + index + ",-" + width + "}");
                 var formatString = string.Join("", elements);
 
                 return formatString;
