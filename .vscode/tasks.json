@@ -12,10 +12,6 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile",
-            "group":{
-                "kind": "build",
-                "isDefault": true
-            }
         },
         {
             "label": "publish",
@@ -35,12 +31,25 @@
             "type": "process",
             "args": [
                 "watch",
+                "--project",
+                ".\\Gsl\\Gsl.proj",
                 "run",
-                "${workspaceFolder}/Gsl/Gsl.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }
