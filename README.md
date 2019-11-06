@@ -26,6 +26,22 @@ reads like this:
     }
     .}
 
+## Quick Start
+
+1. Grab these two files
+
+    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/align.json
+
+    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/align.gsl
+
+2. Download the latest release (TBD)
+
+3. Run 
+
+      `Gsl.exe` align.gsl align.json
+
+   and you should see a file called `Customer.cs` drop into your current directory.
+
 ## Protected sections
 
 `gsl-net` supports protected sections where the code generation engine
@@ -57,9 +73,9 @@ generated code can be.
         public string LastName { get; set; }
         public bool IsValid() 
         {
-           /* CUSTOM-CODE-BEGIN customer-validation */
+           // CUSTOM-CODE-BEGIN customer-validation
            return ! string.IsNullOrEmpty(FirstName) && ! string.IsNullOrEmpty(LastName);
-           /* CUSTOM-CODE-END customer-validation */
+           // CUSTOM-CODE-END customer-validation
         }
     }
 
@@ -91,7 +107,7 @@ And the results look so much better:
         string FirstName; /* the first name of the contact                                         */
         string SurName;   /* the family name or the surname of the contact, it may include hyphens */
         Date   dob;       /* date of birth                                                         */
-        
+
 # TODO
 
 1. `Done` protected sections
