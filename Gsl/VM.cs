@@ -50,11 +50,6 @@ namespace Gsl
             _currentOutputFile.WriteAligned(alignmentId, output);
         }
 
-        public void SetAlignment(int alignmentId, string alignmentMarkers)
-        {
-            _alignments[alignmentId] = alignmentMarkers;
-        }
-
         public void WriteProtectedSection(string sectionName, string prefix, string suffix)
         {
             _currentOutputFile.WriteProtectedSection(sectionName, prefix, suffix);
