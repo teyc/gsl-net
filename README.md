@@ -26,9 +26,45 @@ reads like this:
     }
     .}
 
+## Protected sections
+
+`gsl-net` supports protected sections where the code generation engine
+will not overwrite specific named sections of generated code.
+
+For instance,
+
+    . setOutput('Customer.cs');
+    public class Customer
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool IsValid() 
+        {
+    .      protect('customer-validation', '//')
+        }
+    }
+
+This creates two markers with CUSTOM-CODE-BEGIN and CUSTOM-CODE-END. You can add your
+own code in these sections and they will be protected against being overwritten.
+
+The `protect` command is sufficiently clever to indent the comment markers at the
+same level as your own code. I'd like `gsl-net` to pay attention to how good-looking the
+generated code can be.
+
+    public class Customer
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool IsValid() 
+        {
+           /* CUSTOM-CODE-BEGIN customer-validation */
+           return ! string.IsNullOrEmpty(FirstName) && ! string.IsNullOrEmpty(LastName);
+           /* CUSTOM-CODE-END customer-validation */
+        }
+    }
 # TODO
 
-1. protected sections
+1. `Done` protected sections
 
 2. import modules
 
