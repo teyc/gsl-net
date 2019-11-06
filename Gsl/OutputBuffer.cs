@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System;
+using Gsl.Handlers;
 
 namespace Gsl
 {
@@ -9,6 +10,8 @@ namespace Gsl
     {
         readonly List<object> _lines = new List<object>();
         private readonly IFileSystem fileSystem;
+        private readonly AlignHandler _alignHandler = new AlignHandler();
+        private readonly ProtectedHandler _protectedHandler = new ProtectedHandler();
 
         public OutputBuffer(string filename, IFileSystem fileSystem)
         {
@@ -43,14 +46,24 @@ namespace Gsl
             }
         }
 
+        void WriteWithHandler(IHandler handler, params object[] arguments)
+        {
+            if (handler is null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            handler.WriteTo(this._lines.Add, arguments);
+        }
+
         public void WriteAligned(int alignmentId, string s)
         {
-            _lines.Add(new Aligned(alignmentId, s));
+            WriteWithHandler(_alignHandler, alignmentId, s);
         }
 
         public void WriteProtectedSection(string sectionName, string prefix, string suffix)
         {
-            _lines.Add(new Protected(sectionName, prefix, suffix));
+            WriteWithHandler(_protectedHandler, sectionName, prefix, suffix);
         }
 
         public string GetBuffer()

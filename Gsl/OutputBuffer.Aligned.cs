@@ -7,7 +7,7 @@ namespace Gsl
 {
     public partial class OutputBuffer
     {
-        class Aligned: IOutputBufferElement
+        public class Aligned: IOutputBufferElement
         {
             public Aligned(int alignmentId, string value)
             {

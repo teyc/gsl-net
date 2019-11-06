@@ -18,5 +18,10 @@ namespace Gsl.Handlers
             
             return (false, "");
         }
+
+        public void WriteTo(AddOutput addOutput, object[] args)
+        {
+            
+        }
     }
 }

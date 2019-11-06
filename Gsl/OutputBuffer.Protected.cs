@@ -6,7 +6,7 @@ namespace Gsl
 {
     public partial class OutputBuffer
     {
-        private class Protected : IOutputBufferElement
+        public class Protected : IOutputBufferElement
         {
 
             public Protected(string sectionName, string prefix, string suffix)
