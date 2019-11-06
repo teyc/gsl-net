@@ -27,16 +27,22 @@ namespace Gsl
             
             public static void Expand(Protected protectedSection, IFileSystem fileSystem, string outputPath)
             {
-                var humanGeneratedCode = string.Join(Environment.NewLine,
+                var humanGeneratedCode = 
                     fileSystem.File.ReadAllLines(outputPath)
                     .SkipWhile(line => line.Trim() != protectedSection.MarkBegin)
                     .Skip(1)
-                    .TakeWhile(line => line.Trim() != protectedSection.MarkEnd));
+                    .TakeWhile(line => line.Trim() != protectedSection.MarkEnd)
+                    .ToList();
 
+                var maxLeftIndent = humanGeneratedCode.Any() 
+                    ? humanGeneratedCode.Select(line => line.Length - line.TrimStart().Length).Min()
+                    : 0;
+
+                var indent = string.Format($"{{0,{maxLeftIndent}}}", "");
                 protectedSection.ExpandedValue = string.Join(Environment.NewLine,
-                    protectedSection.MarkBegin,
-                    humanGeneratedCode ?? "",
-                    protectedSection.MarkEnd);
+                    indent + protectedSection.MarkBegin,
+                    string.Join(Environment.NewLine, humanGeneratedCode),
+                    indent + protectedSection.MarkEnd);
             }
         }
     }

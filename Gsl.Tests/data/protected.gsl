@@ -3,17 +3,18 @@
 . log('Hello ${world}');
 namespace CodeGen.Demo
 {
-  class Customer
-  {
-. for (var i = 0; i < fields.length; i++) {
-.   var field = fields[i];
-    public string ${field} 
-    { 
-        get 
+    class Customer
+    {
+.   for (var i = 0; i < fields.length; i++) {
+.       var field = fields[i];
+
+        public string ${field}
         {
-            ${protect("get-" + field, "//")}
-        } 
-    }
-. }
-  }
+            get
+            {
+.               protect("get-" + field, "//");
+            }
+        }
+.  }
+   }
 }

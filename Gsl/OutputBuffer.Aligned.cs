@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using Gsl.Infrastructure;
 
 namespace Gsl
@@ -24,7 +25,7 @@ namespace Gsl
             {
                 formatString = formatString ?? CreateFormatString(widths);
                 var elements = Value.Split("\0").Cast<object>().ToArray();
-                ExpandedValue = string.Format(formatString, elements);
+                ExpandedValue = string.Format(CultureInfo.InvariantCulture, formatString, elements);
             }
 
             private static string CreateFormatString(int[] widths)
