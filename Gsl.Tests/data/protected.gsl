@@ -1,0 +1,19 @@
+. setOutput('Customer.cs');
+. var world = 'World';
+. log('Hello ${world}');
+namespace CodeGen.Demo
+{
+  class Customer
+  {
+. for (var i = 0; i < window.fields.length; i++) {
+.   var field = window.fields[i];
+    public string ${field} 
+    { 
+        get 
+        {
+.           protect("//", "get-" + field);
+        } 
+    }
+. }
+  }
+}
