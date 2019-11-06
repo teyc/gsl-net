@@ -12,15 +12,10 @@ using static Gsl.Tests.Path;
 
 namespace Gsl.Tests
 {
-    [ApprovalTests.Namers.UseApprovalSubdirectory("data")]
-    public class AlignmentTest
-    {
-        private readonly ITestOutputHelper _log;
 
-        public AlignmentTest(ITestOutputHelper log)
-        {
-            _log = log;
-        }
+    public class AlignmentTest: TestBase
+    {
+        public AlignmentTest(ITestOutputHelper log): base(log) { }
 
         [UseReporter(typeof(DiffReporter))]
         [Fact]
@@ -30,14 +25,9 @@ namespace Gsl.Tests
             const string data = "data/align.json";
             const string expected = "data/align.cs.approved";
 
-            var logger = LoggerFactory.Create(configure =>
-                configure.SetMinimumLevel(LogLevel.Trace).AddConsole())
-                .CreateLogger<AlignmentTest>();
-            var fileSystem = new MockFileSystem();
-            var engine = new Gsl.Engine(new VM(fileSystem, logger));
-            var outputFiles = engine.Execute(
-                new FileInfoWrapper(fileSystem, new FileInfo(DataFile(template))),
-                new FileInfoWrapper(fileSystem, new FileInfo(DataFile(data))));
+            var outputFiles = _gslEngine.Execute(
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(template))),
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(data))));
 
             outputFiles.ToList().ForEach(f => _log.WriteLine(f.Name));
             var outputFile = outputFiles[0];
@@ -47,6 +37,7 @@ namespace Gsl.Tests
             //var outputFileName = DataFile(template.Replace(".approved", ".received"));
             //File.WriteAllText(outputFileName, outputContents);
             //_log.WriteLine(outputFileName);
+
             Approvals.Verify(outputContents);
         }
     }

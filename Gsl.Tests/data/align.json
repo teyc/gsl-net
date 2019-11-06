@@ -1,3 +1,7 @@
 {
-    
+    "fields": [
+        "FirstName",
+        "LastName",
+        "DateOfBirth"
+    ]
 }
