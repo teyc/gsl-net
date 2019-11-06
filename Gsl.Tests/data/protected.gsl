@@ -12,7 +12,7 @@ namespace CodeGen.Demo
         {
             get
             {
-.               protect("get-" + field, "//");
+.               protect("get-" + field, "/*", "*/");
             }
         }
 .  }
