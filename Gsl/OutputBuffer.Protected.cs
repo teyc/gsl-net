@@ -24,10 +24,10 @@ namespace Gsl
             public string MarkBegin { get; }
             public string MarkEnd { get; }
             public string ExpandedValue { get; private set;  }
-            
+
             public static void Expand(Protected protectedSection, IFileSystem fileSystem, string outputPath)
             {
-                var humanGeneratedCode = 
+                var humanGeneratedCode =
                     fileSystem.File.ReadAllLines(outputPath)
                     .SkipWhile(line => line.Trim() != protectedSection.MarkBegin)
                     .Skip(1)
@@ -38,7 +38,7 @@ namespace Gsl
                     ? humanGeneratedCode.Select(line => line.Length - line.TrimStart().Length).Min()
                     : 0;
 
-                var indent = string.Format($"{{0,{maxLeftIndent}}}", "");
+                var indent = string.Format(System.Globalization.CultureInfo.InvariantCulture, $"{{0,{maxLeftIndent}}}", "");
                 protectedSection.ExpandedValue = string.Join(Environment.NewLine,
                     indent + protectedSection.MarkBegin,
                     string.Join(Environment.NewLine, humanGeneratedCode),

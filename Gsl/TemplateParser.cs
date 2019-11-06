@@ -1,7 +1,10 @@
+using System;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using static System.StringComparison;
+using static Gsl.TemplateParser;
 
 [assembly: InternalsVisibleTo("Gsl.Tests")]
 
@@ -15,10 +18,12 @@ namespace Gsl
 
         public string TranslateLine(string line)
         {
-            _lineNumber++;
-            line = line.Replace("\r", "");
+            if (line == null) throw new ArgumentNullException(nameof(line));
 
-            if (line.StartsWith(". "))
+            _lineNumber++;
+            line = line.Replace("\r", "", InvariantCulture);
+
+            if (line.StartsWith(". ", InvariantCulture))
             {
                 if (Regex.Match(line.Substring(1), "^[| ]+$").Success)
                 {
@@ -64,16 +69,16 @@ namespace Gsl
             return tokens.ToArray(); 
         }
 
-        internal Token[] ParseInterpolatedString(string line)
+        internal static Token[] ParseInterpolatedString(string line)
         {
             var tokens = new List<Token>();
             int posStart = 0;
             while (posStart < line.Length)
             {
-                var posLeft = line.IndexOf("${", posStart);
+                var posLeft = line.IndexOf("${", posStart, InvariantCulture);
                 if (posLeft != -1)
                 {
-                    var posRight = line.IndexOf("}", posLeft);
+                    var posRight = line.IndexOf("}", posLeft, InvariantCulture);
                     if (posStart < posLeft) tokens.Add(new StringToken(line[posStart..posLeft]));
                     tokens.Add(new ExpressionToken(line[(posLeft + 2)..posRight]));
                     posStart = posRight + 1;

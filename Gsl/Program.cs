@@ -8,9 +8,21 @@ namespace Gsl
 {
     class Program
     {
+        static void ShowHelp()
+        {
+
+        }
+
         static void Main(string[] args)
         {
-            var vm = new VM(new FileSystem(), LoggerFactory.Create(b => b.AddConsole()).CreateLogger<Program>());
+            if (args.Length == 0) 
+            {
+                ShowHelp();
+                return;
+            }
+            
+            using var loggerFactory = LoggerFactory.Create(b => b.AddConsole());
+            var vm = new VM(new FileSystem(), loggerFactory.CreateLogger<Program>());
 
             var engine = new Jint.Engine(options =>
             {

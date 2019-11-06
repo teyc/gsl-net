@@ -1,4 +1,5 @@
 using System;
+using static System.StringComparison;
 
 namespace Gsl
 {
@@ -15,7 +16,7 @@ namespace Gsl
 
     public class StringToken : Token
     {
-        public StringToken(string value) : base(value.Replace("\r", ""))
+        public StringToken(string value) : base(value?.Replace("\r", "", InvariantCulture) ?? throw new ArgumentNullException(nameof(value)))
         {
         }
 
@@ -32,11 +33,11 @@ namespace Gsl
         public override string ToString()
         {
             var escaped = Value
-                .Replace("'", @"\'")
-                .Replace(@"\", @"\\");
+                .Replace("'", @"\'", InvariantCulture)
+                .Replace(@"\", @"\\", InvariantCulture);
             return $"'{escaped}'";
         }
-        
+
     }
 
     public class ExpressionToken : Token

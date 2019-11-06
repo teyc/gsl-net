@@ -41,6 +41,7 @@ namespace Gsl
 
         public void WriteLine(object output)
         {
+            if (output == null) throw new ArgumentNullException(nameof(output));
             _currentOutputFile.WriteLine(output.ToString());
         }
 
