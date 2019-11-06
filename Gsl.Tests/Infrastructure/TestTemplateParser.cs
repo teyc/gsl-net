@@ -7,13 +7,13 @@ namespace Gsl.Tests.Infrastructure
         [Fact]
         public void TestParseAlignment()
         {
-            var parser = new TemplateParser();
+            var handler = new Gsl.Handlers.AlignHandler();
             var lines = new [] {
                 ".    |    |",
                 "abcdefghijkl"
             };
-            parser.TranslateLine(lines[0]);
-            var tokens = parser.ParseInterpolatedStringWithAlignment(1, lines[1]);
+            var (ok, handled) = handler.Handle(1, lines[0]);
+            var tokens = handler.ParseInterpolatedStringWithAlignment(1, lines[1]);
             Assert.Equal(new [] {
                 new StringToken("abcde"),
                 new StringToken("\0"),
