@@ -21,33 +21,20 @@ namespace Gsl
                 return;
             }
             
+            var pathToTemplate = args[0];
+            var pathToData = args[1];
+
             using var loggerFactory = LoggerFactory.Create(b => b.AddConsole());
-            var vm = new VM(new FileSystem(), loggerFactory.CreateLogger<Program>());
-
-            var engine = new Jint.Engine(options =>
-            {
-                options.DebugMode(true);
-            }).SetValue("log", new Action<object>(line => Console.WriteLine("log: " + line)))
-              .SetValue("output", new Action<object>(vm.WriteLine))
-              .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
-              .SetValue("setOutput", new Action<string>(vm.SetOutput))
-              .SetValue("fields", new[] { "FirstName", "LastName", "DateOfBirth" });
-
-
-            var template = File.ReadAllText("Gsl.Tests/data/align.gsl");
-
-            var parser = new TemplateParser();
-            var script = string.Join("\n", 
-                template.Split("\n")
-                    .Select(parser.TranslateLine));
+            var logger = loggerFactory.CreateLogger<Program>();
+            var fileSystem = new FileSystem();
+            var engine = new Gsl.Engine(new Gsl.VM(fileSystem, logger));
             try
             {
-                Console.WriteLine(script);
-                engine.Execute(script);
+                engine.Execute(new FileInfoWrapper(fileSystem, new FileInfo(pathToTemplate)),
+                               new FileInfoWrapper(fileSystem, new FileInfo(pathToData)));
             }
             catch (Exception exception)
             {
-                Console.WriteLine(script);
                 Console.Error.WriteLine(exception.Message);
                 Console.Error.WriteLine(exception.StackTrace);
             }
