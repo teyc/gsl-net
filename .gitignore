@@ -1,4 +1,5 @@
 bin/
 obj/
 .ionide/
+.vs/
 *.received.txt

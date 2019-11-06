@@ -1,11 +1,8 @@
-using System;
 using System.IO;
 using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
-using Microsoft.Extensions.Logging;
 using Xunit;
 using Xunit.Abstractions;
 using static Gsl.Tests.Path;
@@ -23,7 +20,6 @@ namespace Gsl.Tests
         {
             const string template = "data/align.gsl";
             const string data = "data/align.json";
-            const string expected = "data/align.cs.approved";
 
             var outputFiles = _gslEngine.Execute(
                 new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(template))),

@@ -1,3 +1,4 @@
+using Jint.Native.Json;
 using System;
 using System.IO.Abstractions;
 using System.Linq;
@@ -15,10 +16,26 @@ namespace Gsl
         
         public IFileInfo[] Execute(IFileInfo templateFile, IFileInfo dataFile)
         {
-            var template = templateFile.OpenText().ReadToEnd();
+            if (templateFile is null)
+            {
+                throw new ArgumentNullException(nameof(templateFile));
+            }
 
+            if (dataFile is null)
+            {
+                throw new ArgumentNullException(nameof(dataFile));
+            }
+
+            var template = templateFile.OpenText().ReadToEnd();
+            var dataContents = dataFile.OpenText().ReadToEnd();
+
+            return Execute(template, dataContents);
+        }
+
+        private IFileInfo[] Execute(string template, string dataContents)
+        {
             var parser = new TemplateParser();
-            var script = string.Join("\n", 
+            var script = string.Join("\n",
                 template.Split("\n")
                     .Select(parser.TranslateLine));
 
@@ -26,8 +43,13 @@ namespace Gsl
               .SetValue("log", new Action<object>(line => Console.WriteLine("log: " + line)))
               .SetValue("output", new Action<object>(vm.WriteLine))
               .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
-              .SetValue("setOutput", new Action<string>(vm.SetOutput))
-              .SetValue("fields", new[] { "FirstName", "LastName", "DateOfBirth" });
+              .SetValue("setOutput", new Action<string>(vm.SetOutput));
+
+            var data = new JsonParser(jsEngine).Parse(dataContents);
+            foreach (var property in data.AsObject().GetOwnProperties())
+            {
+                jsEngine.Global.Put(property.Key, property.Value.Value, true);
+            }
 
             jsEngine.Execute(script);
 
