@@ -5,13 +5,13 @@ namespace CodeGen.Demo
 {
   class Customer
   {
-. for (var i = 0; i < window.fields.length; i++) {
-.   var field = window.fields[i];
+. for (var i = 0; i < fields.length; i++) {
+.   var field = fields[i];
     public string ${field} 
     { 
         get 
         {
-.           protect("//", "get-" + field);
+            ${protect("get-" + field, "//")}
         } 
     }
 . }

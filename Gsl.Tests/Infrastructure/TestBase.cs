@@ -1,8 +1,12 @@
+using System.Linq;
+using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
+using static Gsl.Tests.Path;
 
 namespace Gsl.Tests
 {
@@ -13,7 +17,7 @@ namespace Gsl.Tests
         const bool DEBUG = false;
         protected readonly ITestOutputHelper _log;
         protected IFileSystem _fileSystem;
-        protected  Gsl.Engine _gslEngine;
+        protected Engine _gslEngine;
         protected ILogger _logger;
 
         public TestBase(ITestOutputHelper log)
@@ -24,14 +28,27 @@ namespace Gsl.Tests
                 configure.SetMinimumLevel(LogLevel.Trace).AddConsole())
                 .CreateLogger<AlignmentTest>();
             _fileSystem = new MockFileSystem();
-            _gslEngine = new Gsl.Engine(new VM(_fileSystem, _logger));
+            _gslEngine = new Engine(new VM(_fileSystem, _logger));
+        }
+
+        protected void TemplateWithSingleFileOutput(string template, string data)
+        {
+            var outputFiles = _gslEngine.Execute(
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(template))),
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(data))));
+
+            outputFiles.ToList().ForEach(f => _log.WriteLine(f.Name));
+            var outputFile = outputFiles[0];
+            var outputContents = outputFile.ReadToEnd();
+
+            Approvals.Verify(outputContents);
         }
 
         protected string Read(IFileInfo fileInfo)
         {
             using var stream = fileInfo.OpenText();
             var contents = stream.ReadToEnd();
-            if (DEBUG) 
+            if (DEBUG)
             {
                 _log.WriteLine(contents);
             }

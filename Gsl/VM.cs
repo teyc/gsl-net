@@ -25,16 +25,16 @@ namespace Gsl
         {
             using var scope = logger.BeginScope(nameof(SetOutput));
 
-            var fileInfo = GetCurrentOutputFile();
-            if (fileInfo.Filename == NONAME)
+            var outputBuffer = GetCurrentOutputFile();
+            if (outputBuffer.Filename == NONAME)
             {
-                fileSystem.File.Move(NONAME, filename);
-                _currentOutputFile = _files[filename] = new OutputBuffer(filename);
+                outputBuffer.SetOutput(filename);
+                _currentOutputFile = _files[filename] = new OutputBuffer(filename, fileSystem);
                 _files.Remove(NONAME);
             }
             else
             {
-                _files[filename] = new OutputBuffer(filename);
+                _files[filename] = new OutputBuffer(filename, fileSystem);
             }
 
         }
@@ -54,6 +54,11 @@ namespace Gsl
             _alignments[alignmentId] = alignmentMarkers;
         }
 
+        public void WriteProtectedSection(string sectionName, string prefix, string suffix)
+        {
+            _currentOutputFile.WriteProtectedSection(sectionName, prefix, suffix);
+        }
+        
         private OutputBuffer GetCurrentOutputFile()
         {
             using var scope = logger.BeginScope(nameof(GetCurrentOutputFile));
@@ -70,7 +75,7 @@ namespace Gsl
                 file.Write("");
                 file.Close();
             }
-            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME);
+            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME, fileSystem);
             return _currentOutputFile;
 
         }

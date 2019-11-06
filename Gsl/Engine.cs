@@ -43,6 +43,7 @@ namespace Gsl
               .SetValue("log", new Action<object>(line => Console.WriteLine("log: " + line)))
               .SetValue("output", new Action<object>(vm.WriteLine))
               .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
+              .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))
               .SetValue("setOutput", new Action<string>(vm.SetOutput));
 
             var data = new JsonParser(jsEngine).Parse(dataContents);

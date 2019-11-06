@@ -49,7 +49,7 @@ namespace Gsl
             }
         }
 
-        internal Gsl.Token[] ParseInterpolatedStringWithAlignment(int alignmentId, string line)
+        internal Token[] ParseInterpolatedStringWithAlignment(int alignmentId, string line)
         {
             var tokens = new List<Token>();
             var startPos = 0;
@@ -64,7 +64,7 @@ namespace Gsl
             return tokens.ToArray(); 
         }
 
-        internal Gsl.Token[] ParseInterpolatedString(string line)
+        internal Token[] ParseInterpolatedString(string line)
         {
             var tokens = new List<Token>();
             int posStart = 0;

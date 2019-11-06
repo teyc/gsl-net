@@ -33,7 +33,7 @@ namespace Gsl
                 Console.WriteLine(script);
                 engine.Execute(script);
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Console.WriteLine(script);
                 Console.Error.WriteLine(exception.Message);
