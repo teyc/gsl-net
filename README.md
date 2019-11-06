@@ -62,6 +62,36 @@ generated code can be.
            /* CUSTOM-CODE-END customer-validation */
         }
     }
+
+## Aligning blocks of text
+
+(Warning - this will likely be revised)
+
+    . setOutput('Customer.cs')
+    . for (var i = 0; i < fields.length; i++) {
+        ${fields[i].type ${fields[i].name}; /* ${fields[i].comment} */
+    . }
+
+Results in a rather untidy-looking generated code:
+
+        string FirstName; /* the first name of the contact */
+        string SurName; /* the family name or the surname of the contact, it may include hyphens */
+        Date dob; /* date of birth */
+
+`gsl-net` solves this problem with alignment markers
+
+    . setOutput('Customer.cs')
+    . for (var i = 0; i < fields.length; i++) {
+    .   |                |                  |                       |
+        ${fields[i].type ${fields[i].name}; /* ${fields[i].comment} */
+    . }
+
+And the results look so much better:
+
+        string FirstName; /* the first name of the contact                                         */
+        string SurName;   /* the family name or the surname of the contact, it may include hyphens */
+        Date   dob;       /* date of birth                                                         */
+        
 # TODO
 
 1. `Done` protected sections
