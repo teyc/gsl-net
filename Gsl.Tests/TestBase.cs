@@ -1,13 +1,13 @@
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using ApprovalTests;
+using ApprovalTests.Reporters;
 using Microsoft.Extensions.Logging;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Gsl.Tests
 {
     [ApprovalTests.Namers.UseApprovalSubdirectory("data")]
+    [UseReporter(typeof(DiffReporter))]
     public class TestBase
     {
         const bool DEBUG = false;

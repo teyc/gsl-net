@@ -2,7 +2,6 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using ApprovalTests;
-using ApprovalTests.Reporters;
 using Xunit;
 using Xunit.Abstractions;
 using static Gsl.Tests.Path;
@@ -14,7 +13,6 @@ namespace Gsl.Tests
     {
         public AlignmentTest(ITestOutputHelper log): base(log) { }
 
-        [UseReporter(typeof(DiffReporter))]
         [Fact]
         public void AlignProperties()
         {
@@ -27,22 +25,9 @@ namespace Gsl.Tests
 
             outputFiles.ToList().ForEach(f => _log.WriteLine(f.Name));
             var outputFile = outputFiles[0];
-
-            using var stream = outputFile.OpenText();
-            var outputContents = stream.ReadToEnd();
-            //var outputFileName = DataFile(template.Replace(".approved", ".received"));
-            //File.WriteAllText(outputFileName, outputContents);
-            //_log.WriteLine(outputFileName);
+            var outputContents = outputFile.ReadToEnd();
 
             Approvals.Verify(outputContents);
-        }
-    }
-
-    public static class Path
-    {
-        public static string DataFile(string relativePath)
-        {
-            return $"../../../{relativePath}";
         }
     }
 }
