@@ -39,10 +39,10 @@ namespace Gsl
                 Aligned.Expand(alignmentGroup);
             }
 
-            var protectedSections = _lines.OfType<Protected>();
+            var protectedSections = _lines.OfType<ProtectedSection>();
             foreach (var protectedSection in protectedSections)
             {
-                Protected.Expand(protectedSection, fileSystem, Filename);
+                ProtectedSection.Expand(protectedSection, fileSystem, Filename);
             }
         }
 

@@ -59,7 +59,7 @@ namespace Gsl.Handlers
 
             if (args.Length < 2)
             {
-                throw new System.ArgumentException("args should have 2 parameters");
+                throw new System.ArgumentException("args should have 2 parameters", nameof(args));
             }
 
             var alignmentId = (int) args[0];

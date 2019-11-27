@@ -6,10 +6,10 @@ namespace Gsl
 {
     public partial class OutputBuffer
     {
-        public class Protected : IOutputBufferElement
+        internal class ProtectedSection : IOutputBufferElement
         {
 
-            public Protected(string sectionName, string prefix, string suffix)
+            public ProtectedSection(string sectionName, string prefix, string suffix)
             {
                 SectionName = sectionName;
                 Prefix = prefix;
@@ -25,7 +25,7 @@ namespace Gsl
             public string MarkEnd { get; }
             public string ExpandedValue { get; private set;  }
 
-            public static void Expand(Protected protectedSection, IFileSystem fileSystem, string outputPath)
+            public static void Expand(ProtectedSection protectedSection, IFileSystem fileSystem, string outputPath)
             {
                 var humanGeneratedCode =
                     fileSystem.File.ReadAllLines(outputPath)

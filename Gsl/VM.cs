@@ -9,7 +9,6 @@ namespace Gsl
     public class VM
     {
         private const string NONAME = "__.__.__";
-        private readonly Dictionary<int, string> _alignments = new Dictionary<int, string>();
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
@@ -66,7 +65,7 @@ namespace Gsl
 
             if (!fileSystem.File.Exists(NONAME))
             {
-                logger.LogTrace($"Creating... {NONAME}");
+                logger.LogTrace("Creating... {0}", NONAME);
                 using var file = fileSystem.File.CreateText(NONAME);
                 file.Write("");
                 file.Close();

@@ -10,12 +10,14 @@ namespace Gsl
     {
         static void ShowHelp()
         {
-
+            Console.Out.WriteLine(@"
+dotnet gsl.dll <template.gsl> <json.gsl>
+            ");
         }
 
         static void Main(string[] args)
         {
-            if (args.Length == 0) 
+            if (args.Length != 2) 
             {
                 ShowHelp();
                 return;

@@ -50,7 +50,9 @@ namespace Gsl.Tests
             var contents = stream.ReadToEnd();
             if (DEBUG)
             {
+                #pragma warning disable CS0162
                 _log.WriteLine(contents);
+                #pragma warning restore CS0162
             }
             return contents;
         }

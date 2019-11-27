@@ -22,7 +22,7 @@ namespace Gsl.Handlers
             var sectionName = (string) args[0];
             var prefix = (string) args[1];
             var suffix = (string) args[2];
-            addOutput(new OutputBuffer.Protected(sectionName, prefix, suffix));
+            addOutput(new OutputBuffer.ProtectedSection(sectionName, prefix, suffix));
         }
     }
 }
