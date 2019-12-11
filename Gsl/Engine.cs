@@ -2,10 +2,11 @@ using Jint.Native.Json;
 using System;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Gsl
 {
-    public class Engine
+    public class Engine: IEngine
     {
         private readonly VM vm;
 
@@ -30,6 +31,11 @@ namespace Gsl
             var dataContents = dataFile.OpenText().ReadToEnd();
 
             return Execute(template, dataContents);
+        }
+
+        public Task<IFileInfo[]> ExecuteAsync(IFileInfo templateFile, IDataProvider dataSource)
+        {
+            throw new NotImplementedException();
         }
 
         private IFileInfo[] Execute(string template, string dataContents)
