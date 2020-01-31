@@ -8,21 +8,19 @@ namespace Gsl
 {
     class Program
     {
-        static void ShowHelp()
+        private static void ShowHelp()
         {
-            Console.Out.WriteLine(@"
-dotnet gsl.dll <template.gsl> <json.gsl>
-            ");
+            Console.Out.WriteLine("Gsl.exe <pathToTempate.gsl> <pathToData.json>");
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            if (args.Length != 2) 
+            if (args.Length != 2)
             {
                 ShowHelp();
                 return;
             }
-            
+
             var pathToTemplate = args[0];
             var pathToData = args[1];
 
