@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -9,7 +10,6 @@ namespace Gsl
     public class VM
     {
         private const string NONAME = "__.__.__";
-        private readonly Dictionary<int, string> _alignments = new Dictionary<int, string>();
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
@@ -42,6 +42,7 @@ namespace Gsl
         public void WriteLine(object output)
         {
             if (output == null) throw new ArgumentNullException(nameof(output));
+            if (_currentOutputFile == null) GetCurrentOutputFile(); // throw new OutputFileNotDefinedException();
             _currentOutputFile.WriteLine(output.ToString());
         }
 
@@ -80,13 +81,24 @@ namespace Gsl
         {
             using var scope = logger.BeginScope(nameof(GetOutputFiles));
 
-            return _files.Values.Cast<OutputBuffer>().Select(ToFileInfo).ToArray();
+            _files.Values.Cast<OutputBuffer>()
+                .Where(f => Path.GetFileName(f.Filename) == NONAME)
+                .Select(f => f.GetBuffer())
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            return _files.Values.Cast<OutputBuffer>()
+                .Where(f => Path.GetFileName(f.Filename) != NONAME)
+                .Select(ToFileInfo).ToArray();
         }
 
         IFileInfo ToFileInfo(OutputBuffer buffer)
         {
+            using var scope = logger.BeginScope(nameof(ToFileInfo));
+
             buffer.Close();
             var fileInfo = fileSystem.FileInfo.FromFileName(buffer.Filename);
+            logger.LogTrace("Outputting {Filename}", fileInfo.Name);
             using (var outputStream = fileSystem.File.CreateText(buffer.Filename))
                 outputStream.Write(buffer.GetBuffer());
             return fileInfo;
