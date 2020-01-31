@@ -10,7 +10,7 @@ namespace Gsl
     {
         static void ShowHelp()
         {
-
+            Console.Out.WriteLine("Gsl.exe pathToTempate pathToData");
         }
 
         static void Main(string[] args)
