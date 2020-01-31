@@ -11,10 +11,8 @@ namespace Gsl.Tests
 
         public static string ReadToEnd(this IFileInfo fileInfo)
         {
-            using (var stream = fileInfo.OpenText())
-            {
-                return stream.ReadToEnd();
-            }
+            using var stream = fileInfo.OpenText();
+            return stream.ReadToEnd();
         }
     }
 }

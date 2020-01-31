@@ -27,7 +27,7 @@ namespace Gsl
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Value);
         }
 
         public override string ToString()
@@ -53,7 +53,7 @@ namespace Gsl
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Value);
         }
 
         public override string ToString()

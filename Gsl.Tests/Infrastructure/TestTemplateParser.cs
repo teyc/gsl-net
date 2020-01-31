@@ -13,6 +13,7 @@ namespace Gsl.Tests.Infrastructure
                 "abcdefghijkl"
             };
             var (ok, handled) = handler.Handle(1, lines[0]);
+            Assert.True(ok);
             var tokens = handler.ParseInterpolatedStringWithAlignment(1, lines[1]);
             Assert.Equal(new [] {
                 new StringToken("abcde"),

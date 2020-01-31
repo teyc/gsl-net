@@ -69,8 +69,8 @@ namespace Gsl
         public string GetBuffer()
         {
             return string.Join("\r\n", _lines.Select(line => {
-                if (line is string) {
-                    return (string) line;
+                if (line is string @string) {
+                    return @string;
                 } else if (line is IOutputBufferElement element) {
                     return element.ExpandedValue;
                 } else {

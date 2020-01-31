@@ -23,7 +23,7 @@ namespace Gsl
             public string Suffix { get; }
             public string MarkBegin { get; }
             public string MarkEnd { get; }
-            public string ExpandedValue { get; private set;  }
+            public string ExpandedValue { get; private set; }
 
             public static void Expand(ProtectedSection protectedSection, IFileSystem fileSystem, string outputPath)
             {
@@ -34,8 +34,8 @@ namespace Gsl
                     .TakeWhile(line => line.Trim() != protectedSection.MarkEnd)
                     .ToList();
 
-                var maxLeftIndent = humanGeneratedCode.Any() 
-                    ? humanGeneratedCode.Select(line => line.Length - line.TrimStart().Length).Min()
+                var maxLeftIndent = humanGeneratedCode.Count > 0
+                    ? humanGeneratedCode.Min(line => line.Length - line.TrimStart().Length)
                     : 0;
 
                 var indent = string.Format(System.Globalization.CultureInfo.InvariantCulture, $"{{0,{maxLeftIndent}}}", "");
