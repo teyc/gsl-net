@@ -96,7 +96,7 @@ namespace Gsl
                 .Select(ToFileInfo).ToArray();
         }
 
-        IFileInfo ToFileInfo(OutputBuffer buffer)
+        private IFileInfo ToFileInfo(OutputBuffer buffer)
         {
             using var scope = logger.BeginScope(nameof(ToFileInfo));
 
@@ -124,5 +124,4 @@ namespace Gsl
             }
         }
     }
-
 }

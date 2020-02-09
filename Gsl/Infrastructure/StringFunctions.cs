@@ -23,7 +23,7 @@ namespace Gsl
                 throw new ArgumentNullException(nameof(properCase));
             }
 
-            return properCase.Substring(0, 1).ToLowerInvariant() + properCase.Substring(1);
+            return char.ToUpperInvariant(properCase[0]) + properCase.Substring(1);
         }
     }
 }

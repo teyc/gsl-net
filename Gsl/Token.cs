@@ -7,11 +7,10 @@ namespace Gsl
     {
         public string Value { get; }
 
-        public Token(string value)
+        protected Token(string value)
         {
             Value = value;
         }
-
     }
 
     public class StringToken : Token
@@ -37,7 +36,6 @@ namespace Gsl
                 .Replace(@"\", @"\\", InvariantCulture);
             return $"'{escaped}'";
         }
-
     }
 
     public class ExpressionToken : Token
@@ -61,5 +59,4 @@ namespace Gsl
             return Value;
         }
     }
-
 }

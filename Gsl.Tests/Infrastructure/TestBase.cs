@@ -14,7 +14,7 @@ namespace Gsl.Tests
     [UseReporter(typeof(DiffReporter))]
     public class TestBase
     {
-        const bool DEBUG = true;
+        private readonly bool DEBUG = true;
         protected readonly ITestOutputHelper _log;
         protected IFileSystem _fileSystem;
         protected Engine _gslEngine;

@@ -3,7 +3,6 @@ using Xunit.Abstractions;
 
 namespace Gsl.Tests
 {
-
     public class AlignmentTest: TestBase
     {
         public AlignmentTest(ITestOutputHelper log): base(log) { }
@@ -16,6 +15,5 @@ namespace Gsl.Tests
 
             TemplateWithSingleFileOutput(template, data);
         }
-
     }
 }
