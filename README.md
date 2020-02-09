@@ -121,6 +121,39 @@ And the results look so much better:
         string SurName;   /* the family name or the surname of the contact, it may include hyphens */
         Date   dob;       /* date of birth                                                         */
 
+## Replace Text directive
+
+It is convenient to start with a working file and perform search and replace
+to arrive at a template. Suppose you have a source like this:
+
+       class Foo
+       {
+           findFoo(id): Foo;
+           deleteFoo(id): void;
+           createFoo(): Foo;
+       }
+
+You can use a `replaceText()` directive on your template.
+
+       . var className = data.className;
+       . replaceText("Foo", className);
+       class Foo
+       {
+           findFoo(id): Foo;
+           deleteFoo(id): void;
+           createFoo(): Foo;
+       }
+
+instead of the uglier option:
+
+       . var className = data.className;
+       class Foo
+       {
+           find${className}(id): Foo;
+           delete${className}(id): void;
+           create${className}(): Foo;
+       }
+
 ## Functions
 
 `gsl-net` provides these helper functions

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Gsl.Handlers;
 using Microsoft.Extensions.Logging;
 
 namespace Gsl
@@ -11,6 +12,7 @@ namespace Gsl
     {
         private const string NONAME = "__.__.__";
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
+        private readonly ReplaceTextHandler replaceText = new ReplaceTextHandler();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
         private OutputBuffer _currentOutputFile;
@@ -35,12 +37,12 @@ namespace Gsl
             if (outputBuffer.Filename == NONAME)
             {
                 outputBuffer.SetOutput(filename);
-                _currentOutputFile = _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
+                _currentOutputFile = CreateOutputBuffer(filename);
                 _files.Remove(NONAME);
             }
             else
             {
-                _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
+                _currentOutputFile = CreateOutputBuffer(filename);
             }
         }
 
@@ -49,6 +51,16 @@ namespace Gsl
             if (output == null) throw new ArgumentNullException(nameof(output));
             if (_currentOutputFile == null) GetCurrentOutputFile(); // throw new OutputFileNotDefinedException();
             _currentOutputFile.WriteLine(output.ToString());
+        }
+
+        internal string ExpandText(string input)
+        {
+            return replaceText.Expand(input);
+        }
+
+        internal void ReplaceText(string search, string replace)
+        {
+            replaceText.Set(search, replace);
         }
 
         public void WriteLineAligned(int alignmentId, string output)
@@ -77,8 +89,14 @@ namespace Gsl
                 file.Write("");
                 file.Close();
             }
-            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME, fileSystem, new Handlers.AlignHandler(logger));
+            _currentOutputFile = CreateOutputBuffer(NONAME);
             return _currentOutputFile;
+        }
+
+        private OutputBuffer CreateOutputBuffer(string filename)
+        {
+            _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
+            return _files[filename];
         }
 
         public IFileInfo[] GetOutputFiles()
@@ -96,7 +114,7 @@ namespace Gsl
                 .Select(ToFileInfo).ToArray();
         }
 
-        IFileInfo ToFileInfo(OutputBuffer buffer)
+        private IFileInfo ToFileInfo(OutputBuffer buffer)
         {
             using var scope = logger.BeginScope(nameof(ToFileInfo));
 
@@ -124,5 +142,4 @@ namespace Gsl
             }
         }
     }
-
 }

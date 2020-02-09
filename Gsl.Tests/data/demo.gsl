@@ -1,9 +1,10 @@
-. setOutput("demo.ts");
 . var properName = entityName;
 . var kebabName = kebabCase(properName);
+. for (var j = 0; j < 2; j++) {
+.   setOutput("demo" + (j+1) +".ts");
 namespace Gsl.KitchenSink
 {
-    class ${entityName}
+    class ${properName + (j+1)}
     {
 . for (var i = 0; i < properties.length; i++) {
 .   var fieldName = properties[i][0];
@@ -19,3 +20,4 @@ namespace Gsl.KitchenSink
         }
     }
 }
+. }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Gsl
 {
-    class Program
+    internal class Program
     {
         private static void ShowHelp()
         {

@@ -1,0 +1,30 @@
+﻿file: replaceText.Baz.cs
+namespace Gsl.Tests
+{
+    public class Baz
+    {
+        public static void CreateBaz() { };
+        public static void UpdateBaz(Baz item) { };
+        public static void DeleteBaz(int id) { };
+    }
+}
+file: replaceText.Bar.cs
+namespace Gsl.Tests
+{
+    public class Bar
+    {
+        public static void CreateBar() { };
+        public static void UpdateBar(Bar item) { };
+        public static void DeleteBar(int id) { };
+    }
+}
+file: replaceText.Quux.cs
+namespace Gsl.Tests
+{
+    public class Quux
+    {
+        public static void CreateQuux() { };
+        public static void UpdateQuux(Quux item) { };
+        public static void DeleteQuux(int id) { };
+    }
+}

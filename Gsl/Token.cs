@@ -7,15 +7,16 @@ namespace Gsl
     {
         public string Value { get; }
 
-        public Token(string value)
+        protected Token(string value)
         {
             Value = value;
         }
-
     }
 
     public class StringToken : Token
     {
+        public static readonly StringToken NULL = new StringToken("\0");
+
         public StringToken(string value) : base(value?.Replace("\r", "", InvariantCulture) ?? throw new ArgumentNullException(nameof(value)))
         {
         }
@@ -35,9 +36,8 @@ namespace Gsl
             var escaped = Value
                 .Replace("'", @"\'", InvariantCulture)
                 .Replace(@"\", @"\\", InvariantCulture);
-            return $"'{escaped}'";
+            return $"__expandText('{escaped}')";
         }
-
     }
 
     public class ExpressionToken : Token
@@ -61,5 +61,4 @@ namespace Gsl
             return Value;
         }
     }
-
 }

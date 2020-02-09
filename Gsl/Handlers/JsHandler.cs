@@ -15,13 +15,12 @@ namespace Gsl.Handlers
             {
                 return (true, line.Substring(2));
             }
-            
+
             return (false, "");
         }
 
         public void WriteTo(AddOutput addOutput, object[] args)
         {
-            
         }
     }
 }

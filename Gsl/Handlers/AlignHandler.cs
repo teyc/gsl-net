@@ -83,7 +83,7 @@ namespace Gsl.Handlers
                 int endPos = startPos + size;
                 var substring = line[startPos..endPos];
                 tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
-                tokens.Add(new StringToken("\0"));
+                tokens.Add(StringToken.NULL);
                 startPos = endPos;
                 _logger.LogTrace("Tokens {tokens}", string.Join(":", tokens.Select(token => token.ToString())));
             }

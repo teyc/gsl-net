@@ -1,5 +1,9 @@
 {
-    "MsBuild": {
+    "FormattingOptions": {
+        "EnableEditorConfigSupport": true,
+        "IndentationSize": 4
+     },
+     "MsBuild": {
         "MSBuildSDKsPath": "C:\\Program Files\\dotnet\\sdk\\3.0.102\\Sdks",
         "UseLegacySdkResolver": true
     }

@@ -12,10 +12,10 @@
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Gsl/bin/Debug/netcoreapp3.0/Gsl.dll",
             "args": [ 
-                "../Gsl.Tests/data/demo.gsl",
-                "../Gsl.Tests/data/demo.json"
+                "Gsl.Tests/data/demo.gsl",
+                "Gsl.Tests/data/demo.json"
             ],
-            "cwd": "${workspaceFolder}/Gsl",
+            "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
