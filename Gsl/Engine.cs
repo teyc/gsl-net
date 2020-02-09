@@ -1,3 +1,4 @@
+using Gsl.Handlers;
 using Jint.Native.Json;
 using Microsoft.Extensions.Logging;
 using System;
@@ -45,6 +46,8 @@ namespace Gsl
             logger.LogTrace("{script}", script);
 
             var jsEngine = new Jint.Engine(options => options.DebugMode())
+              .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
+              .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
               .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
               .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
               .SetValue("camelCase", new Func<string, string>(StringFunctions.CamelCase))

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Gsl.Handlers;
 using Microsoft.Extensions.Logging;
 
 namespace Gsl
@@ -11,6 +12,7 @@ namespace Gsl
     {
         private const string NONAME = "__.__.__";
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
+        private readonly ReplaceTextHandler replaceText = new ReplaceTextHandler();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
         private OutputBuffer _currentOutputFile;
@@ -49,6 +51,16 @@ namespace Gsl
             if (output == null) throw new ArgumentNullException(nameof(output));
             if (_currentOutputFile == null) GetCurrentOutputFile(); // throw new OutputFileNotDefinedException();
             _currentOutputFile.WriteLine(output.ToString());
+        }
+
+        internal string ExpandText(string input)
+        {
+            return replaceText.Expand(input);
+        }
+
+        internal void ReplaceText(string search, string replace)
+        {
+            replaceText.Set(search, replace);
         }
 
         public void WriteLineAligned(int alignmentId, string output)

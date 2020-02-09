@@ -36,7 +36,7 @@ namespace Gsl
             var escaped = Value
                 .Replace("'", @"\'", InvariantCulture)
                 .Replace(@"\", @"\\", InvariantCulture);
-            return $"'{escaped}'";
+            return $"__expandText('{escaped}')";
         }
     }
 
