@@ -1,2 +1,4 @@
 dotnet run -p Gsl # runs project
 dotnet watch -p Gsl.Tests test # tests project
+dotnet tool install -g dotnet-warp # install warp
+pushd Gsl; dotnet warp; popd # build single exe
