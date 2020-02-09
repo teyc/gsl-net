@@ -1,0 +1,9 @@
+﻿namespace Gsl.Tests
+{
+    public class Juror
+    {
+        public static void CreateJuror() { };
+        public static void UpdateJuror(Juror item) { };
+        public static void DeleteJuror(int id) { }
+    }
+}

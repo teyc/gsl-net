@@ -12,13 +12,15 @@ namespace Gsl
     public class TemplateParser
     {
         private readonly AlignHandler _alignHandler;
+        private readonly ReplaceTextPreprocessor _replaceTextPreprocessor;
         private readonly JsHandler _jsHandler = new JsHandler();
 
         private int _lineNumber = 0;
 
-        public TemplateParser(AlignHandler alignHandler)
+        public TemplateParser(AlignHandler alignHandler, ReplaceTextPreprocessor replaceTextPreprocessor)
         {
             _alignHandler = alignHandler;
+            _replaceTextPreprocessor = replaceTextPreprocessor;
         }
 
         public string TranslateLine(string line)
@@ -28,17 +30,20 @@ namespace Gsl
             _lineNumber++;
             line = line.Replace("\r", "", InvariantCulture);
 
-            var (ok, result) = _alignHandler.Handle(_lineNumber, line);
+            var (ok, result) = _replaceTextPreprocessor.Handle(_lineNumber, line);
+            if (ok) return result;
+
+            (ok, result) = _alignHandler.Handle(_lineNumber, line);
             if (ok) return result;
 
             (ok, result) = _jsHandler.Handle(_lineNumber, line);
             if (ok) return result;
 
-            var tokens = ParseInterpolatedString(line);
+            var tokens = ParseInterpolatedString(line, _replaceTextPreprocessor);
             return "output(" + string.Join(" + ", tokens.Select(token => token.ToString())) + ");";
         }
 
-        internal static Token[] ParseInterpolatedString(string line)
+        internal static Token[] ParseInterpolatedString(string line, ReplaceTextPreprocessor replaceTextPreprocessor)
         {
             var tokens = new List<Token>();
             int posStart = 0;
@@ -48,7 +53,12 @@ namespace Gsl
                 if (posLeft != -1)
                 {
                     var posRight = line.IndexOf("}", posLeft, InvariantCulture);
-                    if (posStart < posLeft) tokens.Add(new StringToken(line[posStart..posLeft]));
+                    if (posStart < posLeft)
+                    {
+                        tokens.Add(new StringToken(
+                            replaceTextPreprocessor?.Expand(line[posStart..posLeft]) ?? line[posStart..posLeft]));
+                    }
+
                     tokens.Add(new ExpressionToken(line[(posLeft + 2)..posRight]));
                     posStart = posRight + 1;
                 }
@@ -57,8 +67,13 @@ namespace Gsl
                     break;
                 }
             }
-            tokens.Add(new StringToken(line[posStart..]));
+            tokens.Add(new StringToken(replaceTextPreprocessor?.Expand(line[posStart..]) ?? line[posStart..]));
             return tokens.ToArray();
+        }
+
+        internal static IEnumerable<Token> ParseInterpolatedString(string line)
+        {
+            return ParseInterpolatedString(line, null);
         }
     }
 }

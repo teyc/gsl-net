@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Gsl.Handlers;
 using Microsoft.Extensions.Logging;
 
 namespace Gsl
@@ -13,6 +14,7 @@ namespace Gsl
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
+        private readonly ReplaceTextPreprocessor _replaceTextHandler = new ReplaceTextPreprocessor();
         private OutputBuffer _currentOutputFile;
         private (string Search, string FileExtension) doNotOverwrite;
 
@@ -20,6 +22,14 @@ namespace Gsl
         {
             this.fileSystem = fileSystem;
             this.logger = logger;
+        }
+
+        public ReplaceTextPreprocessor ReplaceTextPreprocessor
+        {
+            get
+            {
+                return _replaceTextHandler;
+            }
         }
 
         public void DoNotOverwriteIf(string searchString, string fileExtension)
@@ -59,6 +69,11 @@ namespace Gsl
         public void WriteProtectedSection(string sectionName, string prefix, string suffix)
         {
             _currentOutputFile.WriteProtectedSection(sectionName, prefix, suffix);
+        }
+
+        public void ReplaceText(string search, string replace)
+        {
+            _replaceTextHandler.Add(search, replace);
         }
 
         private OutputBuffer GetCurrentOutputFile()
