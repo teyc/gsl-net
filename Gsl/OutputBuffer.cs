@@ -8,15 +8,16 @@ namespace Gsl
 {
     public partial class OutputBuffer
     {
-        readonly List<object> _lines = new List<object>();
-        private readonly IFileSystem fileSystem;
-        private readonly AlignHandler _alignHandler = new AlignHandler();
+        private readonly List<object> _lines = new List<object>();
+        private readonly IFileSystem _fileSystem;
+        private readonly AlignHandler _alignHandler;
         private readonly ProtectedHandler _protectedHandler = new ProtectedHandler();
 
-        public OutputBuffer(string filename, IFileSystem fileSystem)
+        public OutputBuffer(string filename, IFileSystem fileSystem, AlignHandler alignHandler)
         {
             Filename = filename;
-            this.fileSystem = fileSystem;
+            _fileSystem = fileSystem;
+            _alignHandler = alignHandler;
         }
 
         public string Filename { get; private set; }
@@ -42,11 +43,11 @@ namespace Gsl
             var protectedSections = _lines.OfType<ProtectedSection>();
             foreach (var protectedSection in protectedSections)
             {
-                ProtectedSection.Expand(protectedSection, fileSystem, Filename);
+                ProtectedSection.Expand(protectedSection, _fileSystem, Filename);
             }
         }
 
-        void WriteWithHandler(IHandler handler, params object[] arguments)
+        private void WriteWithHandler(IHandler handler, params object[] arguments)
         {
             if (handler is null)
             {

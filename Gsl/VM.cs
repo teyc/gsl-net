@@ -35,12 +35,12 @@ namespace Gsl
             if (outputBuffer.Filename == NONAME)
             {
                 outputBuffer.SetOutput(filename);
-                _currentOutputFile = _files[filename] = new OutputBuffer(filename, fileSystem);
+                _currentOutputFile = _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
                 _files.Remove(NONAME);
             }
             else
             {
-                _files[filename] = new OutputBuffer(filename, fileSystem);
+                _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
             }
 
         }
@@ -78,7 +78,7 @@ namespace Gsl
                 file.Write("");
                 file.Close();
             }
-            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME, fileSystem);
+            _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME, fileSystem, new Handlers.AlignHandler(logger));
             return _currentOutputFile;
 
         }

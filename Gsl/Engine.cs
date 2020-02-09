@@ -37,7 +37,7 @@ namespace Gsl
 
         private IFileInfo[] Execute(string template, string dataContents)
         {
-            var parser = new TemplateParser();
+            var parser = new TemplateParser(new Handlers.AlignHandler(logger));
             var script = string.Join("\n",
                 template.Split("\n")
                     .Select(parser.TranslateLine));

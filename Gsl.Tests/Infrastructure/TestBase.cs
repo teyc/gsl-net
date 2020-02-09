@@ -28,7 +28,7 @@ namespace Gsl.Tests
                 configure.SetMinimumLevel(LogLevel.Trace).AddConsole())
                 .CreateLogger<AlignmentTest>();
             _fileSystem = new MockFileSystem();
-            _gslEngine = new Engine(new VM(_fileSystem, _logger));
+            _gslEngine = new Engine(new VM(_fileSystem, _logger), _logger);
         }
 
         protected void TemplateWithSingleFileOutput(string template, string data)

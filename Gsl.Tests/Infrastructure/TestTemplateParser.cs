@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Gsl.Tests.Infrastructure
@@ -7,7 +8,10 @@ namespace Gsl.Tests.Infrastructure
         [Fact]
         public void TestParseAlignment()
         {
-            var handler = new Gsl.Handlers.AlignHandler();
+            var logger = LoggerFactory.Create(configure =>
+                configure.SetMinimumLevel(LogLevel.Trace).AddConsole())
+                .CreateLogger<TestTemplateParser>();
+            var handler = new Gsl.Handlers.AlignHandler(logger);
             var lines = new [] {
                 ".    |    |",
                 "abcdefghijkl"

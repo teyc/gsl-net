@@ -11,10 +11,15 @@ namespace Gsl
 {
     public class TemplateParser
     {
-        private readonly AlignHandler _alignHandler = new AlignHandler();
+        private readonly AlignHandler _alignHandler;
         private readonly JsHandler _jsHandler = new JsHandler();
 
         private int _lineNumber = 0;
+
+        public TemplateParser(AlignHandler alignHandler)
+        {
+            _alignHandler = alignHandler;
+        }
 
         public string TranslateLine(string line)
         {
