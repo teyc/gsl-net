@@ -2,4 +2,5 @@ bin/
 obj/
 .ionide/
 .vs/
+dotnetwarp_temp/
 *.received.txt
