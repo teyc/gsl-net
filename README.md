@@ -30,17 +30,30 @@ reads like this:
 
 1. Grab these two files
 
-    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/align.json
+    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/demo.json
 
-    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/align.gsl
+    - https://raw.githubusercontent.com/teyc/gsl-net/master/Gsl.Tests/data/demo.gsl
 
 2. Download the latest release (TBD)
 
 3. Run 
 
-      `Gsl.exe` align.gsl align.json
+      `Gsl.exe` demo.gsl demo.json
 
-   and you should see a file called `Customer.cs` drop into your current directory.
+   and you should see a file called `demo.ts` drop into your current directory.
+
+## Stop code-generation
+
+If you decide that there are specific files that should not be subject
+to further code generation, you can apply the following command in your template:
+
+    . doNotOverwriteIf("DO NOT OVERWRITE", ".bak")
+
+If `gsl-net` finds the phrase "DO NOT OVERWITE" in the output file, it will write
+its output to a `.bak` file instead.
+
+Then you can just diff the output and decide what part you may wish to copy
+into your source manually. Hint: `code.exe --diff FileA FileB`
 
 ## Protected sections
 
