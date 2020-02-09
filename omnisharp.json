@@ -1,5 +1,6 @@
 {
     "MsBuild": {
-        "UseLegacySdkResolver": false
+        "MSBuildSDKsPath": "C:\\Program Files\\dotnet\\sdk\\3.0.102\\Sdks",
+        "UseLegacySdkResolver": true
     }
 }
