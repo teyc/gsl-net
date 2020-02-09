@@ -24,7 +24,11 @@ namespace Gsl
             var pathToTemplate = args[0];
             var pathToData = args[1];
 
-            using var loggerFactory = LoggerFactory.Create(b => b.AddConsole());
+            using var loggerFactory = LoggerFactory.Create(b =>
+            {
+                b.AddConsole();
+                //b.SetMinimumLevel(LogLevel.Trace);
+            });
             var logger = loggerFactory.CreateLogger<Program>();
             var fileSystem = new FileSystem();
             var engine = new Gsl.Engine(new Gsl.VM(fileSystem, logger));
