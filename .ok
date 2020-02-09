@@ -1,4 +1,5 @@
-dotnet run -p Gsl # runs project
+dotnet run -p Gsl Gsl.Tests\data\demo.gsl Gsl.Tests\data\demo.json # runs project
+dotnet run -p Gsl Gsl.Tests\data\demo.gsl Gsl.Tests\data\demo.json --verbose # runs project
 dotnet watch -p Gsl.Tests test # tests project
 dotnet tool install -g dotnet-warp # install warp
 pushd Gsl; dotnet warp; popd # build single exe

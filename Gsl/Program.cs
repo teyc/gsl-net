@@ -15,7 +15,7 @@ namespace Gsl
 
         public static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length < 2)
             {
                 ShowHelp();
                 return;
@@ -23,15 +23,16 @@ namespace Gsl
 
             var pathToTemplate = args[0];
             var pathToData = args[1];
+            var verbose = args.Skip(2).Any(arg => arg == "--verbose");
 
             using var loggerFactory = LoggerFactory.Create(b =>
             {
                 b.AddConsole();
-                //b.SetMinimumLevel(LogLevel.Trace);
+                if (verbose) b.SetMinimumLevel(LogLevel.Trace);
             });
             var logger = loggerFactory.CreateLogger<Program>();
             var fileSystem = new FileSystem();
-            var engine = new Gsl.Engine(new Gsl.VM(fileSystem, logger));
+            var engine = new Engine(new Gsl.VM(fileSystem, logger), logger);
             try
             {
                 engine.Execute(new FileInfoWrapper(fileSystem, new FileInfo(pathToTemplate)),

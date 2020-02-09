@@ -1,0 +1,19 @@
+. //setOutput("demo.ts");
+. var name = entityName;
+namespace Gsl.KitchenSink
+{
+    class ${entityName}
+    {
+. for (var i = 0; i < properties.length; i++) {
+.   var fieldName = properties[i][0];
+.   var fieldType = properties[i][1];
+.   log(fieldName);
+.                          |
+        public ${fieldName}: ${fieldType};
+. }
+
+        public save(): void {
+.               protect("save-" + name, "/*", "*/")
+        }
+    }
+}

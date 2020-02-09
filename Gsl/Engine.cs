@@ -1,4 +1,5 @@
 using Jint.Native.Json;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO.Abstractions;
 using System.Linq;
@@ -8,12 +9,14 @@ namespace Gsl
     public class Engine
     {
         private readonly VM vm;
+        private readonly ILogger logger;
 
-        public Engine(VM vm)
+        public Engine(VM vm, ILogger logger)
         {
             this.vm = vm ?? throw new ArgumentNullException(nameof(vm));
+            this.logger = logger;
         }
-        
+
         public IFileInfo[] Execute(IFileInfo templateFile, IFileInfo dataFile)
         {
             if (templateFile is null)
@@ -38,6 +41,8 @@ namespace Gsl
             var script = string.Join("\n",
                 template.Split("\n")
                     .Select(parser.TranslateLine));
+
+            logger.LogTrace("{script}", script);
 
             var jsEngine = new Jint.Engine(options => options.DebugMode())
               .SetValue("log", new Action<object>(line => Console.WriteLine("log: " + line)))

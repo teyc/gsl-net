@@ -1,0 +1,8 @@
+{
+    "entityName": "Demo",
+    "properties": [
+        ["PropertyTrueOrFalse", "bool"],
+        ["PropertyName", "string"],
+        ["PropertyScheduledDateOfArrival", "DateTime"]
+    ]
+}
