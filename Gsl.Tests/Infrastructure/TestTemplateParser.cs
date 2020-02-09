@@ -21,9 +21,9 @@ namespace Gsl.Tests.Infrastructure
             var tokens = handler.ParseInterpolatedStringWithAlignment(1, lines[1]);
             Assert.Equal(new [] {
                 new StringToken("abcde"),
-                new StringToken("\0"),
+                StringToken.NULL,
                 new StringToken("fghij"),
-                new StringToken("\0"),
+                StringToken.NULL,
                 new StringToken("kl"),
             }, tokens);
         }

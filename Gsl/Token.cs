@@ -15,6 +15,8 @@ namespace Gsl
 
     public class StringToken : Token
     {
+        public static readonly StringToken NULL = new StringToken("\0");
+
         public StringToken(string value) : base(value?.Replace("\r", "", InvariantCulture) ?? throw new ArgumentNullException(nameof(value)))
         {
         }
