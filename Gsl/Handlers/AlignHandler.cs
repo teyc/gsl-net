@@ -49,7 +49,6 @@ namespace Gsl.Handlers
 
             _lineNumberOfLastAlignmentRule = -1;
             return (false, "");
-
         }
 
         public void WriteTo(AddOutput addOutput, object[] args)
@@ -69,11 +68,11 @@ namespace Gsl.Handlers
                 throw new System.ArgumentException("args should have 2 parameters", nameof(args));
             }
 
-            var alignmentId = (int) args[0];
-            var lineToBeAligned = (string) args[1];
+            var alignmentId = (int)args[0];
+            var lineToBeAligned = (string)args[1];
             addOutput(new OutputBuffer.Aligned(alignmentId, lineToBeAligned));
         }
-         
+
         internal Token[] ParseInterpolatedStringWithAlignment(int alignmentId, string line)
         {
             using var scope = _logger.BeginScope(nameof(ParseInterpolatedStringWithAlignment));

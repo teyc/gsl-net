@@ -42,7 +42,6 @@ namespace Gsl
             {
                 _files[filename] = new OutputBuffer(filename, fileSystem, new Handlers.AlignHandler(logger));
             }
-
         }
 
         public void WriteLine(object output)
@@ -80,7 +79,6 @@ namespace Gsl
             }
             _currentOutputFile = _files[NONAME] = new OutputBuffer(NONAME, fileSystem, new Handlers.AlignHandler(logger));
             return _currentOutputFile;
-
         }
 
         public IFileInfo[] GetOutputFiles()
