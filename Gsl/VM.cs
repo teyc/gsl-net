@@ -42,7 +42,7 @@ namespace Gsl
             }
             else
             {
-                CreateOutputBuffer(filename);
+                _currentOutputFile = CreateOutputBuffer(filename);
             }
         }
 
