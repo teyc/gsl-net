@@ -37,22 +37,11 @@ namespace Gsl
 
         private IFileInfo[] Execute(string template, string dataContents)
         {
-            var parser = new TemplateParser(new Handlers.AlignHandler(logger));
-            var script = string.Join("\n",
-                template.Split("\n")
-                    .Select(parser.TranslateLine));
-
-            logger.LogTrace("{script}", script);
-
             var jsEngine = new Jint.Engine(options => options.DebugMode())
               .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
               .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
               .SetValue("camelCase", new Func<string, string>(StringFunctions.CamelCase))
-              .SetValue("output", new Action<object>(vm.WriteLine))
-              .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
-              .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))
-              .SetValue("doNotOverwriteIf", new Action<string, string>(vm.DoNotOverwriteIf))
-              .SetValue("setOutput", new Action<string>(vm.SetOutput));
+              .SetValue("doNotOverwriteIf", new Action<string, string>(vm.DoNotOverwriteIf));
 
             var data = new JsonParser(jsEngine).Parse(dataContents);
             foreach (var property in data.AsObject().GetOwnProperties())
@@ -60,7 +49,33 @@ namespace Gsl
                 jsEngine.Global.Put(property.Key, property.Value.Value, true);
             }
 
-            jsEngine.Execute(script);
+            /* run a zero-output pass - to gather replace text */
+            var parser = new TemplateParser(new Handlers.AlignHandler(logger), vm.ReplaceTextPreprocessor);
+            var script = string.Join("\n",
+                template.Split("\n")
+                    .Select(parser.TranslateLine));
+            logger.LogTrace("script: {script}", script);
+
+            jsEngine
+                .SetValue("setOutput", new Action<string>(_ => { }))
+                .SetValue("output", new Action<object>(_ => { }))
+                .SetValue("outputAligned", new Action<int, string>((_, dummy) => { }))
+                .SetValue("protect", new Action<string, string, string>((_, dummy, dummy2) => { }))
+                .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
+                .Execute(script);
+
+            /* the parser's replaceText engine has been populated, uuuggly */
+            script = string.Join("\n",
+                            template.Split("\n")
+                                .Select(parser.TranslateLine));
+
+            jsEngine
+                .SetValue("setOutput", new Action<string>(vm.SetOutput))
+                .SetValue("output", new Action<object>(vm.WriteLine))
+                .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
+                .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))
+                .SetValue("replaceText", new Action<string, string>((_, dummy) => { }))
+                .Execute(script);
 
             return vm.GetOutputFiles();
         }
