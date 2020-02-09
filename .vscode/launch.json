@@ -11,7 +11,10 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Gsl/bin/Debug/netcoreapp3.0/Gsl.dll",
-            "args": [],
+            "args": [ 
+                // "C:\\dev\\toyapps\\DJAG\\Code.Tool\\Fake\\Migration.cs.gsl",
+                // "C:\\dev\\toyapps\\DJAG\\DJAG.Juror.Definition\\SampleData\\Juror.json"
+            ],
             "cwd": "${workspaceFolder}/Gsl",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
