@@ -2,9 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using static System.StringComparison;
-using static Gsl.TemplateParser;
 using Gsl.Handlers;
 
 [assembly: InternalsVisibleTo("Gsl.Tests")]
@@ -13,8 +11,8 @@ namespace Gsl
 {
     public class TemplateParser
     {
-        private AlignHandler _alignHandler = new AlignHandler();
-        private JsHandler _jsHandler = new JsHandler();
+        private readonly AlignHandler _alignHandler = new AlignHandler();
+        private readonly JsHandler _jsHandler = new JsHandler();
 
         private int _lineNumber = 0;
 
@@ -35,7 +33,6 @@ namespace Gsl
             return "output(" + string.Join(" + ", tokens.Select(token => token.ToString())) + ");";
         }
 
-
         internal static Token[] ParseInterpolatedString(string line)
         {
             var tokens = new List<Token>();
@@ -51,12 +48,13 @@ namespace Gsl
                     posStart = posRight + 1;
                 }
                 else
+                {
                     break;
+                }
             }
             tokens.Add(new StringToken(line[posStart..]));
             return tokens.ToArray();
         }
-
     }
 
 }
