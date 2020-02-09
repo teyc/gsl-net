@@ -17,7 +17,7 @@ namespace Gsl.Tests
             const string template = "data/replaceText.gsl";
             const string data = "data/replaceText.json";
 
-            TemplateWithSingleFileOutput(template, data);
+            TemplateWithMultipleFileOutput(template, data);
         }
     }
 }

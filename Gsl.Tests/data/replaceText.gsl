@@ -1,5 +1,6 @@
-. setOutput('replaceText.cs');
-. var className = data.className;
+. for (var i = 0; i < data.classNames.length; i++) {
+. setOutput('replaceText.' + data.classNames[i] + '.cs');
+. var className = data.classNames[i];
 . replaceText('Foo', className);
 namespace Gsl.Tests
 {
@@ -10,3 +11,4 @@ namespace Gsl.Tests
         public static void DeleteFoo(int id) { };
     }
 }
+. }

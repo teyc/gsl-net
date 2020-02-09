@@ -1,5 +1,9 @@
 {
     "data": {
-        "className": "Bar"
+        "classNames": [
+            "Bar",
+            "Baz",
+            "Quux"
+        ]
     }
 }

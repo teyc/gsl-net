@@ -44,15 +44,31 @@ namespace Gsl.Tests
             Approvals.Verify(outputContents);
         }
 
+        protected void TemplateWithMultipleFileOutput(string template, string data)
+        {
+            var outputFiles = _gslEngine.Execute(
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(template))),
+                new FileInfoWrapper(_fileSystem, new FileInfo(DataFile(data))));
+
+            var outputContents = string.Join("\n",
+                outputFiles.Select(outputFile =>
+                {
+                    var header = "file: " + outputFile.Name + "\n";
+                    return header + outputFile.ReadToEnd();
+                }));
+
+            Approvals.Verify(outputContents);
+        }
+
         protected string Read(IFileInfo fileInfo)
         {
             using var stream = fileInfo.OpenText();
             var contents = stream.ReadToEnd();
             if (DEBUG)
             {
-                #pragma warning disable CS0162
+#pragma warning disable CS0162
                 _log.WriteLine(contents);
-                #pragma warning restore CS0162
+#pragma warning restore CS0162
             }
             return contents;
         }
