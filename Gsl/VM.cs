@@ -105,8 +105,8 @@ namespace Gsl
             buffer.Close();
             var fileInfo = fileSystem.FileInfo.FromFileName(buffer.Filename);
             if (doNotOverwrite != default
-                && File.Exists(buffer.Filename)
-                && File.ReadAllText(buffer.Filename).Contains(doNotOverwrite.Search, StringComparison.InvariantCulture))
+                && fileSystem.File.Exists(buffer.Filename)
+                && fileSystem.File.ReadAllText(buffer.Filename).Contains(doNotOverwrite.Search, StringComparison.InvariantCulture))
             {
                 var alternateFilename = buffer.Filename + doNotOverwrite.FileExtension;
                 logger.LogWarning("Not overwriting {Filename} because {protection} found. Wrote to {AlternateFilename}",
