@@ -1,0 +1,12 @@
+. setOutput('replaceText.cs');
+. var className = data.className;
+. replaceText('Foo', className);
+namespace Gsl.Tests
+{
+    public class Foo
+    {
+        public static void CreateFoo() { };
+        public static void UpdateFoo(Foo item) { };
+        public static void DeleteFoo(int id) { };
+    }
+}

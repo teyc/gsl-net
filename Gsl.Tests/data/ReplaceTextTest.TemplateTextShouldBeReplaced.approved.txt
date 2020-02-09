@@ -1,0 +1,9 @@
+﻿namespace Gsl.Tests
+{
+    public class Bar
+    {
+        public static void CreateBar() { };
+        public static void UpdateBar(Bar item) { };
+        public static void DeleteBar(int id) { };
+    }
+}
