@@ -9,7 +9,6 @@ namespace Gsl
     {
         internal class ProtectedSection : IOutputBufferElement
         {
-
             public ProtectedSection(string sectionName, string prefix, string suffix)
             {
                 SectionName = sectionName;

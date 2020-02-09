@@ -10,7 +10,7 @@ namespace Gsl
     {
         private static void ShowHelp()
         {
-            Console.Out.WriteLine("Gsl.exe <pathToTempate.gsl> <pathToData.json>");
+            Console.Out.WriteLine("Gsl.exe <pathToTempate.gsl> <pathToData.json> [--verbose]");
         }
 
         public static void Main(string[] args)
