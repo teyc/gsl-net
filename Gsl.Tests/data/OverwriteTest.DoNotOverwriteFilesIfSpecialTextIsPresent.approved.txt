@@ -1,0 +1,11 @@
+﻿// DO NOT OVERWRITE
+// Overwrite test
+// If the target output file contains a particular string, then write 
+// the output to and alternate location
+public class Overwrite
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Age { get; set; }
+    public string JobTitle { get; set; }
+}

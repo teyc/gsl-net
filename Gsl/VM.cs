@@ -14,11 +14,17 @@ namespace Gsl
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
         private OutputBuffer _currentOutputFile;
+        private (string Search, string FileExtension) doNotOverwrite;
 
         public VM(IFileSystem fileSystem, ILogger logger)
         {
             this.fileSystem = fileSystem;
             this.logger = logger;
+        }
+
+        public void DoNotOverwriteIf(string searchString, string fileExtension)
+        {
+            this.doNotOverwrite = (Search: searchString, FileExtension: fileExtension);
         }
 
         public void SetOutput(string filename)
@@ -55,7 +61,7 @@ namespace Gsl
         {
             _currentOutputFile.WriteProtectedSection(sectionName, prefix, suffix);
         }
-        
+
         private OutputBuffer GetCurrentOutputFile()
         {
             using var scope = logger.BeginScope(nameof(GetCurrentOutputFile));
@@ -98,10 +104,26 @@ namespace Gsl
 
             buffer.Close();
             var fileInfo = fileSystem.FileInfo.FromFileName(buffer.Filename);
-            logger.LogTrace("Outputting {Filename}", fileInfo.Name);
-            using (var outputStream = fileSystem.File.CreateText(buffer.Filename))
-                outputStream.Write(buffer.GetBuffer());
-            return fileInfo;
+            if (doNotOverwrite != default
+                && File.Exists(buffer.Filename)
+                && File.ReadAllText(buffer.Filename).Contains(doNotOverwrite.Search, StringComparison.InvariantCulture))
+            {
+                var alternateFilename = buffer.Filename + doNotOverwrite.FileExtension;
+                logger.LogWarning("Not overwriting {Filename} because {protection} found. Wrote to {AlternateFilename}",
+                    fileInfo.Name,
+                    doNotOverwrite.Search,
+                    alternateFilename);
+                using (var outputStream = fileSystem.File.CreateText(alternateFilename))
+                    outputStream.Write(buffer.GetBuffer());
+                return fileInfo;
+            }
+            else
+            {
+                logger.LogTrace("Outputting {Filename}", fileInfo.Name);
+                using (var outputStream = fileSystem.File.CreateText(buffer.Filename))
+                    outputStream.Write(buffer.GetBuffer());
+                return fileInfo;
+            }
         }
     }
 

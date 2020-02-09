@@ -44,6 +44,7 @@ namespace Gsl
               .SetValue("output", new Action<object>(vm.WriteLine))
               .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
               .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))
+              .SetValue("doNotOverwriteIf", new Action<string, string>(vm.DoNotOverwriteIf))
               .SetValue("setOutput", new Action<string>(vm.SetOutput));
 
             var data = new JsonParser(jsEngine).Parse(dataContents);

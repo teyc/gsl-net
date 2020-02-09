@@ -1,0 +1,12 @@
+. doNotOverwriteIf("DO NOT OVERWRITE", ".bak")
+. setOutput("Overwrite.cs")
+// Overwrite test
+// If the target output file contains a particular string, then write 
+// the output to and alternate location
+public class Overwrite
+{
+. for (var i = 0; i < fields.length; i++) {
+.   var field = fields[i];
+    public string ${field} { get; set; }
+. }
+}
