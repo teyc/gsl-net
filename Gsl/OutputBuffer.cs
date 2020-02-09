@@ -8,6 +8,7 @@ namespace Gsl
 {
     public partial class OutputBuffer
     {
+        private bool _isClosed;
         private readonly List<object> _lines = new List<object>();
         private readonly IFileSystem _fileSystem;
         private readonly AlignHandler _alignHandler;
@@ -45,6 +46,8 @@ namespace Gsl
             {
                 ProtectedSection.Expand(protectedSection, _fileSystem, Filename);
             }
+
+            _isClosed = true;
         }
 
         private void WriteWithHandler(IHandler handler, params object[] arguments)
@@ -69,12 +72,20 @@ namespace Gsl
 
         public string GetBuffer()
         {
-            return string.Join("\r\n", _lines.Select(line => {
-                if (line is string @string) {
+            if (!_isClosed) throw new InvalidOperationException("Close() must be called before GetBuffer");
+
+            return string.Join("\r\n", _lines.Select(line =>
+            {
+                if (line is string @string)
+                {
                     return @string;
-                } else if (line is IOutputBufferElement element) {
+                }
+                else if (line is IOutputBufferElement element)
+                {
                     return element.ExpandedValue;
-                } else {
+                }
+                else
+                {
                     throw new System.Exception("Unhandled type " + line.GetType());
                 }
             }));

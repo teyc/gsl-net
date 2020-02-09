@@ -87,7 +87,7 @@ namespace Gsl
 
             _files.Values.Cast<OutputBuffer>()
                 .Where(f => Path.GetFileName(f.Filename) == NONAME)
-                .Select(f => f.GetBuffer())
+                .Select(f => { f.Close(); return f.GetBuffer(); })
                 .ToList()
                 .ForEach(Console.WriteLine);
 

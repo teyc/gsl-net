@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.IO.Abstractions;
 using System;
+using System.Collections.Generic;
 
 namespace Gsl
 {
@@ -27,12 +28,13 @@ namespace Gsl
 
             public static void Expand(ProtectedSection protectedSection, IFileSystem fileSystem, string outputPath)
             {
-                var humanGeneratedCode =
-                    fileSystem.File.ReadAllLines(outputPath)
-                    .SkipWhile(line => line.Trim() != protectedSection.MarkBegin)
-                    .Skip(1)
-                    .TakeWhile(line => line.Trim() != protectedSection.MarkEnd)
-                    .ToList();
+                var humanGeneratedCode = fileSystem.File.Exists(outputPath)
+                    ? fileSystem.File.ReadAllLines(outputPath)
+                      .SkipWhile(line => line.Trim() != protectedSection.MarkBegin)
+                      .Skip(1)
+                      .TakeWhile(line => line.Trim() != protectedSection.MarkEnd)
+                      .ToList()
+                    : new List<string>();
 
                 var maxLeftIndent = humanGeneratedCode.Count > 0
                     ? humanGeneratedCode.Min(line => line.Length - line.TrimStart().Length)

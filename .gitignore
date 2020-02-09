@@ -4,3 +4,6 @@ obj/
 .vs/
 dotnetwarp_temp/
 *.received.txt
+__.__.__
+Gsl.exe
+demo.ts
