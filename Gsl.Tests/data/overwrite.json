@@ -1,0 +1,9 @@
+{
+    "fields": [
+        "FirstName",
+        "LastName",
+        "Age",
+        "JobTitle",
+        "THIS_FIELD_SHOULD_NOT_BE_PRESENT_BECAUSE_OVERWRITE_IS_ON"
+    ]
+}
