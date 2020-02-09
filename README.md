@@ -121,6 +121,14 @@ And the results look so much better:
         string SurName;   /* the family name or the surname of the contact, it may include hyphens */
         Date   dob;       /* date of birth                                                         */
 
+## Functions
+
+`gsl-net` provides these helper functions
+
+    kebabCase(properCase: string): string
+
+    camelCase(properCase: string): string
+    
 # TODO
 
 1. `Done` protected sections

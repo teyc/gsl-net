@@ -45,7 +45,9 @@ namespace Gsl
             logger.LogTrace("{script}", script);
 
             var jsEngine = new Jint.Engine(options => options.DebugMode())
-              .SetValue("log", new Action<object>(line => Console.WriteLine("log: " + line)))
+              .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
+              .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
+              .SetValue("camelCase", new Func<string, string>(StringFunctions.CamelCase))
               .SetValue("output", new Action<object>(vm.WriteLine))
               .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
               .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))

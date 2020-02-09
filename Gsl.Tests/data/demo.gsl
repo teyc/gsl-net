@@ -1,5 +1,6 @@
-. //setOutput("demo.ts");
-. var name = entityName;
+. setOutput("demo.ts");
+. var properName = entityName;
+. var kebabName = kebabCase(properName);
 namespace Gsl.KitchenSink
 {
     class ${entityName}
@@ -8,12 +9,13 @@ namespace Gsl.KitchenSink
 .   var fieldName = properties[i][0];
 .   var fieldType = properties[i][1];
 .   log(fieldName);
-.                          |
-        public ${fieldName}: ${fieldType};
+.                                     |
+        public ${camelCase(fieldName)}: ${fieldType};
 . }
 
         public save(): void {
-.               protect("save-" + name, "/*", "*/")
+            const element = document.getElementById("${kebabName}");
+.               protect("save-" + properName, "/*", "*/")
         }
     }
 }
