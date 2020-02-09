@@ -162,6 +162,14 @@ instead of the uglier option:
 
     camelCase(properCase: string): string
     
+## Contributing
+
+There are a few shortcuts for building this project
+
+1. run `. _ok.ps1`, and this should show you a list of options when you type `ok`
+
+2. You can build a self-contained .exe with `dotnet warp`
+
 # TODO
 
 1. `Done` protected sections
