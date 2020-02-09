@@ -6,4 +6,4 @@ dotnetwarp_temp/
 *.received.txt
 __.__.__
 Gsl.exe
-demo.ts
+demo*.ts
