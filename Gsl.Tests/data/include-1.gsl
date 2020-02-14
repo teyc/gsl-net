@@ -1,0 +1,5 @@
+. setOutput('Include.cs');
+namespace Gsl.Include
+{
+.    include('include-2.gsl');
+}
