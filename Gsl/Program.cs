@@ -10,7 +10,36 @@ namespace Gsl
     {
         private static void ShowHelp()
         {
-            Console.Out.WriteLine("Gsl.exe <pathToTempate.gsl> <pathToData.json> [--verbose]");
+            Console.Out.WriteLine(@"Gsl.exe <pathToTempate.gsl> <pathToData.json> [--verbose]
+
+A gsl program consists of lines that begin with '.' (period) which is generally interpreted with a ES5
+javascript engine, and lines which do not - is output as javascript template strings.
+
+Example:
+
+    . var name = 'World';
+    Hello ${name}!
+
+outputs:
+
+    Hello World!
+
+Functions:
+
+    output(text)                          - writes text to the output
+    protect(sectionName, prefix, suffix)  - creates a protected section
+    doNotOverwriteIf(incantation, alternateExtension)
+                                          - if a piece of text is present in the output file, 
+                                            output is written to a file with an alternate file 
+                                            extension
+    setOutput(filename)                   - set the output filename (relative to working directory)
+    replaceText(search, replace)          - replaces text in the template with an alternative
+    log(message)                          - for printf-style debugging
+
+    kebabCase(properCase)                 - turns WikiCase to wiki-case
+    camelCase(properCase)                 - turns WikiCase to wikiCase
+    include(filename)                     - includes a file relative to current file
+");
         }
 
         public static void Main(string[] args)

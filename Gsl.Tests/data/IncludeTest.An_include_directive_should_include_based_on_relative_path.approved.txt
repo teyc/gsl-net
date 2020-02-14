@@ -1,0 +1,9 @@
+﻿namespace Gsl.Include
+{
+    public class Sample
+    {
+        public int value01;
+        public int value11;
+        public int value21;
+    }
+}

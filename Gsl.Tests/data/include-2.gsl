@@ -1,0 +1,6 @@
+    public class Sample
+    {
+. for (var i = 0; i < data.fieldCount; i++) {
+        public int value${i+1};
+. }
+    }

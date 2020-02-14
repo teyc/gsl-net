@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -12,16 +13,59 @@ namespace Gsl
     {
         private const string NONAME = "__.__.__";
         private readonly Dictionary<string, OutputBuffer> _files = new Dictionary<string, OutputBuffer>();
+        private readonly ConcurrentStack<string> _pathStack = new ConcurrentStack<string>();
         private readonly ReplaceTextHandler replaceText = new ReplaceTextHandler();
         private readonly IFileSystem fileSystem;
         private readonly ILogger logger;
         private OutputBuffer _currentOutputFile;
         private (string Search, string FileExtension) doNotOverwrite;
 
+
         public VM(IFileSystem fileSystem, ILogger logger)
         {
             this.fileSystem = fileSystem;
             this.logger = logger;
+        }
+
+        public void EvaluateTemplate(Jint.Engine jsEngine, string templatePath = null, string templateContent = null)
+        {
+            if (jsEngine == null) throw new ArgumentNullException(nameof(jsEngine));
+            if (templateContent == null && templatePath == null) throw new ArgumentNullException(nameof(templatePath));
+
+            try
+            {
+                _pathStack.Push(templatePath);
+
+                if (templateContent == null)
+                {
+                    var currentPath = fileSystem.FileInfo.FromFileName(
+                        fileSystem.Path.Combine(
+                            _pathStack
+                            .Select(fileSystem.Path.GetDirectoryName)
+                            .Reverse()
+                        .Union(
+                            new[] { Path.GetFileName(_pathStack.First()) }).ToArray()))
+                        .FullName;
+                    if (!fileSystem.File.Exists(currentPath))
+                    {
+                        throw new FileNotFoundException(currentPath);
+                    }
+                    templateContent = fileSystem.File.ReadAllText(currentPath);
+                    logger.LogInformation("{currentPath} {templateContent}", currentPath, templateContent);
+                }
+
+                var parser = new TemplateParser(new Handlers.AlignHandler(logger));
+                var script = string.Join("\n",
+                    templateContent.Split("\n")
+                        .Select(parser.TranslateLine));
+
+                logger.LogInformation("script: {script}", script);
+                jsEngine.Execute(script);
+            }
+            finally
+            {
+                _pathStack.TryPop(out _);
+            }
         }
 
         public void DoNotOverwriteIf(string searchString, string fileExtension)
