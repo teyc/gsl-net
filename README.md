@@ -121,6 +121,8 @@ And the results look so much better:
         string SurName;   /* the family name or the surname of the contact, it may include hyphens */
         Date   dob;       /* date of birth                                                         */
 
+## Include File directive
+
 ## Replace Text directive
 
 It is convenient to start with a working file and perform search and replace

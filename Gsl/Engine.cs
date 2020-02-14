@@ -1,9 +1,7 @@
-using Gsl.Handlers;
 using Jint.Native.Json;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO.Abstractions;
-using System.Linq;
 
 namespace Gsl
 {
@@ -38,13 +36,6 @@ namespace Gsl
 
         private IFileInfo[] Execute(string template, string dataContents)
         {
-            var parser = new TemplateParser(new Handlers.AlignHandler(logger));
-            var script = string.Join("\n",
-                template.Split("\n")
-                    .Select(parser.TranslateLine));
-
-            logger.LogTrace("{script}", script);
-
             var jsEngine = new Jint.Engine(options => options.DebugMode())
               .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
               .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
@@ -63,7 +54,7 @@ namespace Gsl
                 jsEngine.Global.Put(property.Key, property.Value.Value, true);
             }
 
-            jsEngine.Execute(script);
+            vm.EvaluateTemplate(template, jsEngine, "./source.ejs");
 
             return vm.GetOutputFiles();
         }

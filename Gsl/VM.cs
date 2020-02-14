@@ -24,6 +24,19 @@ namespace Gsl
             this.logger = logger;
         }
 
+        public void EvaluateTemplate(string templateContent, Jint.Engine jsEngine, string templatePath = null)
+        {
+            if (templateContent == null) throw new ArgumentNullException(nameof(templateContent));
+            if (jsEngine == null) throw new ArgumentNullException(nameof(jsEngine));
+
+            var parser = new TemplateParser(new Handlers.AlignHandler(logger));
+            var script = string.Join("\n",
+                templateContent.Split("\n")
+                    .Select(parser.TranslateLine));
+
+            jsEngine.Execute(script);
+        }
+
         public void DoNotOverwriteIf(string searchString, string fileExtension)
         {
             this.doNotOverwrite = (Search: searchString, FileExtension: fileExtension);
