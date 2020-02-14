@@ -31,10 +31,10 @@ namespace Gsl
             var template = templateFile.OpenText().ReadToEnd();
             var dataContents = dataFile.OpenText().ReadToEnd();
 
-            return Execute(template, dataContents);
+            return Execute(template, dataContents, templateFile.FullName);
         }
 
-        private IFileInfo[] Execute(string template, string dataContents)
+        private IFileInfo[] Execute(string template, string dataContents, string templatePath)
         {
             var jsEngine = new Jint.Engine(options => options.DebugMode())
               .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
@@ -48,13 +48,17 @@ namespace Gsl
               .SetValue("doNotOverwriteIf", new Action<string, string>(vm.DoNotOverwriteIf))
               .SetValue("setOutput", new Action<string>(vm.SetOutput));
 
+            jsEngine
+              .SetValue("include", new Action<string>(
+                  relativePath => vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: relativePath)));
+
             var data = new JsonParser(jsEngine).Parse(dataContents);
             foreach (var property in data.AsObject().GetOwnProperties())
             {
                 jsEngine.Global.Put(property.Key, property.Value.Value, true);
             }
 
-            vm.EvaluateTemplate(template, jsEngine, "./source.ejs");
+            vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: templatePath, templateContent: template);
 
             return vm.GetOutputFiles();
         }
