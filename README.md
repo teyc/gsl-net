@@ -123,6 +123,12 @@ And the results look so much better:
 
 ## Include File directive
 
+GSL files can be refactored and `include`d 
+
+    . // we are in file 1
+    . // files are included relative to the current file
+    . include('../file2.gsl')
+
 ## Replace Text directive
 
 It is convenient to start with a working file and perform search and replace
