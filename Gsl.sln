@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gsl", "Gsl\Gsl.csproj", "{F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gsl.Tests", "Gsl.Tests\Gsl.Tests.csproj", "{093C7A15-6C45-4352-976D-BDEDCF5FD274}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gsl.Template", "Gsl.Template\Gsl.Template.csproj", "{E968556C-39FC-45A0-9904-88F06A6EBACE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{093C7A15-6C45-4352-976D-BDEDCF5FD274}.Release|x64.Build.0 = Release|Any CPU
 		{093C7A15-6C45-4352-976D-BDEDCF5FD274}.Release|x86.ActiveCfg = Release|Any CPU
 		{093C7A15-6C45-4352-976D-BDEDCF5FD274}.Release|x86.Build.0 = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|x64.Build.0 = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Debug|x86.Build.0 = Debug|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|x64.ActiveCfg = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|x64.Build.0 = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|x86.ActiveCfg = Release|Any CPU
+		{E968556C-39FC-45A0-9904-88F06A6EBACE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

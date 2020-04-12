@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Gsl.Infrastructure;
 using static System.StringComparison;
 
 namespace Gsl.Handlers
@@ -81,13 +82,13 @@ namespace Gsl.Handlers
             foreach (var size in _alignments[alignmentId])
             {
                 int endPos = startPos + size;
-                var substring = line[startPos..endPos];
+                var substring = line.Substring(startPos, endPos - startPos);
                 tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
                 tokens.Add(StringToken.NULL);
                 startPos = endPos;
                 _logger.LogTrace("Tokens {tokens}", string.Join(":", tokens.Select(token => token.ToString())));
             }
-            tokens.AddRange(TemplateParser.ParseInterpolatedString(line[startPos..]));
+            tokens.AddRange(TemplateParser.ParseInterpolatedString(line.Substring(startPos)));
             return tokens.ToArray();
         }
     }

@@ -24,7 +24,7 @@ namespace Gsl
             public void ExpandAlignment(int[] widths, string formatString = null)
             {
                 formatString ??= CreateFormatString(widths);
-                var elements = Value.Split("\0").Cast<object>().ToArray();
+                var elements = Value.Split('\0').Cast<object>().ToArray();
                 ExpandedValue = string.Format(CultureInfo.InvariantCulture, formatString, elements);
             }
 
@@ -36,7 +36,7 @@ namespace Gsl
 
             public static void Expand(IEnumerable<Aligned> items)
             {
-                var widths = items.Select(item => item.Value.Split("\0").Select(s => s.Length))
+                var widths = items.Select(item => item.Value.Split('\0').Select(s => s.Length))
                                   .Transpose()
                                   .Select(widths => widths.Max())
                                   .ToArray();

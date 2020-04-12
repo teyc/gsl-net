@@ -15,7 +15,7 @@ namespace Gsl.Handlers
             string output = input;
             foreach (var (search, replace) in _defs)
             {
-                output = output.Replace(search, replace, StringComparison.InvariantCulture);
+                output = output.Replace(search, replace);
             }
             return output;
         }

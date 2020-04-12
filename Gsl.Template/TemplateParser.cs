@@ -26,7 +26,7 @@ namespace Gsl
             if (line == null) throw new ArgumentNullException(nameof(line));
 
             _lineNumber++;
-            line = line.Replace("\r", "", InvariantCulture);
+            line = line.Replace("\r", "");
 
             var (ok, result) = _alignHandler.Handle(_lineNumber, line);
             if (ok) return result;
@@ -48,8 +48,8 @@ namespace Gsl
                 if (posLeft != -1)
                 {
                     var posRight = line.IndexOf("}", posLeft, InvariantCulture);
-                    if (posStart < posLeft) tokens.Add(new StringToken(line[posStart..posLeft]));
-                    tokens.Add(new ExpressionToken(line[(posLeft + 2)..posRight]));
+                    if (posStart < posLeft) tokens.Add(new StringToken(line.Substring(posStart, posLeft - posStart)));
+                    tokens.Add(new ExpressionToken(line.Substring(posLeft + 2, posRight - posLeft - 2)));
                     posStart = posRight + 1;
                 }
                 else
@@ -57,7 +57,7 @@ namespace Gsl
                     break;
                 }
             }
-            tokens.Add(new StringToken(line[posStart..]));
+            tokens.Add(new StringToken(line.Substring(posStart)));
             return tokens.ToArray();
         }
     }

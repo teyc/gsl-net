@@ -16,7 +16,7 @@ namespace Gsl
                         : char.ToString(ch)));
         }
 
-        public static string CamelCase([NotNull] string properCase)
+        public static string CamelCase(string properCase)
         {
             if (properCase is null)
             {

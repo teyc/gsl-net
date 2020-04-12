@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using static System.StringComparison;
 
 namespace Gsl
@@ -17,7 +18,7 @@ namespace Gsl
     {
         public static readonly StringToken NULL = new StringToken("\0");
 
-        public StringToken(string value) : base(value?.Replace("\r", "", InvariantCulture) ?? throw new ArgumentNullException(nameof(value)))
+        public StringToken(string value) : base(value?.Replace("\r", "") ?? throw new ArgumentNullException(nameof(value)))
         {
         }
 
@@ -28,14 +29,14 @@ namespace Gsl
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return -1937169414 + EqualityComparer<string>.Default.GetHashCode(Value);
         }
 
         public override string ToString()
         {
             var escaped = Value
-                .Replace("'", @"\'", InvariantCulture)
-                .Replace(@"\", @"\\", InvariantCulture);
+                .Replace("'", @"\'")
+                .Replace(@"\", @"\\");
             return $"__expandText('{escaped}')";
         }
     }
@@ -53,7 +54,7 @@ namespace Gsl
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return -1937169414 + EqualityComparer<string>.Default.GetHashCode(Value);
         }
 
         public override string ToString()

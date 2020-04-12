@@ -56,7 +56,7 @@ namespace Gsl
 
                 var parser = new TemplateParser(new Handlers.AlignHandler(logger));
                 var script = string.Join("\n",
-                    templateContent.Split("\n")
+                    templateContent.Split('\n')
                         .Select(parser.TranslateLine));
 
                 logger.LogInformation("script: {script}", script);
@@ -166,7 +166,7 @@ namespace Gsl
             var fileInfo = fileSystem.FileInfo.FromFileName(buffer.Filename);
             if (doNotOverwrite != default
                 && fileSystem.File.Exists(buffer.Filename)
-                && fileSystem.File.ReadAllText(buffer.Filename).Contains(doNotOverwrite.Search, StringComparison.InvariantCulture))
+                && fileSystem.File.ReadAllText(buffer.Filename).Contains(doNotOverwrite.Search))
             {
                 var alternateFilename = buffer.Filename + doNotOverwrite.FileExtension;
                 logger.LogWarning("Not overwriting {Filename} because {protection} found. Wrote to {AlternateFilename}",
