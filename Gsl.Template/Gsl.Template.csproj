@@ -5,6 +5,18 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Version>1.0-alpha</Version>
+    <PackageId>Gsl.Template</PackageId>
+    <Authors>Chui Tey</Authors>
+    <Company>XPX Consulting</Company>
+    <PackageTags>Templating;Code Generator</PackageTags>
+    <Description>A code generator library that draws its inspiration from 
+    iMatix's GSL. Uses Javascript rather than a custom language. Extensible
+    with .NET functions.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="jint" Version="2.11.58" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
