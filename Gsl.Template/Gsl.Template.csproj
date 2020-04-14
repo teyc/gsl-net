@@ -10,6 +10,8 @@
     <PackageId>Gsl.Template</PackageId>
     <Authors>Chui Tey</Authors>
     <Company>XPX Consulting</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>Templating;Code Generator</PackageTags>
     <Description>A code generator library that draws its inspiration from 
     iMatix's GSL. Uses Javascript rather than a custom language. Extensible
