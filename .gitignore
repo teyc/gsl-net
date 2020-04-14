@@ -7,3 +7,6 @@ dotnetwarp_temp/
 __.__.__
 Gsl.exe
 demo*.ts
+
+.fake
+.ionide
