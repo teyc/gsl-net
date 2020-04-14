@@ -11,13 +11,17 @@
     <Authors>Chui Tey</Authors>
     <Company>XPX Consulting</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <!-- <PackageLicenseFile>LICENSE</PackageLicenseFile> -->
     <PackageTags>Templating;Code Generator</PackageTags>
     <Description>A code generator library that draws its inspiration from 
     iMatix's GSL. Uses Javascript rather than a custom language. Extensible
     with .NET functions.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="jint" Version="2.11.58" />
