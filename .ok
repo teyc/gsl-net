@@ -1,6 +1,7 @@
 dotnet run -p Gsl Gsl.Tests\data\demo.gsl Gsl.Tests\data\demo.json # runs project
 dotnet run -p Gsl Gsl.Tests\data\demo.gsl Gsl.Tests\data\demo.json --verbose # runs project
 dotnet watch -p Gsl.Tests test # tests project
-dotnet publish -r win-x64 -c Release /p:PublishSingleFile # build single exe
+remove-item -Recurse Gsl\bin\Release\netcoreapp3.0\win-x64\publish\ # clean
+dotnet publish -r win-x64 -c Release # build single exe
 copy .\Gsl\bin\Release\netcoreapp3.0\win-x64\publish\Gsl.exe C:\Bin\.
 dotnet test # run tests
