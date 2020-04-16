@@ -1,0 +1,17 @@
+﻿namespace CodeGen.Demo
+{
+  class Customer
+  {
+    public string FirstName   { get; set; }
+    public string LastName    { get; set; }
+    public string DateOfBirth { get; set; }
+  }
+
+  class Widget
+  {
+    public string SKU    { get; set; }
+    public string Cost   { get; set; }
+    public string Weight { get; set; }
+  }
+
+}

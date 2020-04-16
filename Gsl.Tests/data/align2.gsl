@@ -1,0 +1,20 @@
+. setOutput('Customer.cs');
+. var world = 'World';
+. log('Hello ${world}');
+namespace CodeGen.Demo
+{
+. for (var j = 0; j < classes.length; j++) {
+.   var class_ = classes[j];
+.   var className = class_.name;
+.   var fields = class_.fields;
+  class ${className}
+  {
+. for (var i = 0; i < fields.length; i++) {
+.   var field = fields[i];
+.                          |
+    public string ${field} { get; set; }
+. }
+  }
+
+. }
+}

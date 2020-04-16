@@ -15,5 +15,14 @@ namespace Gsl.Tests
 
             TemplateWithSingleFileOutput(template, data);
         }
+
+        [Fact]
+        public void NestedAlignProperties()
+        {
+            const string template = "data/align2.gsl";
+            const string data = "data/align2.json";
+
+            TemplateWithSingleFileOutput(template, data);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Gsl
         private readonly ILogger logger;
         private OutputBuffer _currentOutputFile;
         private (string Search, string FileExtension) doNotOverwrite;
-
+        private ForStatementObserver forStatementObserver;
 
         public VM(IFileSystem fileSystem, ILogger logger)
         {
@@ -31,6 +31,8 @@ namespace Gsl
         {
             if (jsEngine == null) throw new ArgumentNullException(nameof(jsEngine));
             if (templateContent == null && templatePath == null) throw new ArgumentNullException(nameof(templatePath));
+
+            this.forStatementObserver = new ForStatementObserver(jsEngine);
 
             try
             {
@@ -109,7 +111,7 @@ namespace Gsl
 
         public void WriteLineAligned(int alignmentId, string output)
         {
-            _currentOutputFile.WriteAligned(alignmentId, output);
+            _currentOutputFile.WriteAligned((alignmentId * 100) + forStatementObserver.Counter, output);
         }
 
         public void WriteProtectedSection(string sectionName, string prefix, string suffix)

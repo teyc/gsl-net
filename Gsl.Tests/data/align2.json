@@ -1,0 +1,20 @@
+{
+    "classes": [
+        {
+            "name": "Customer",
+            "fields": [
+                "FirstName",
+                "LastName",
+                "DateOfBirth"
+            ]
+        },
+        {
+            "name": "Widget",
+            "fields": [
+                "SKU",
+                "Cost",
+                "Weight"
+            ]
+        }
+    ]
+}
