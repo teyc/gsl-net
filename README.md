@@ -42,6 +42,28 @@ reads like this:
 
    and you should see a file called `demo.ts` drop into your current directory.
 
+## Gsl.Template nuget package
+
+Here's some sample code to host your own templating engine.
+
+    dotnet add package Gsl.Template
+    dotnet add package System.IO.Abstractions
+    dotnet add package Microsoft.Extensions.Logging
+
+    var logger = loggerFactory.CreateLogger<Program>();
+    var fileSystem = new FileSystem();
+    var engine = new Engine(new Gsl.VM(fileSystem, logger), logger);
+    try
+    {
+        engine.Execute(new FileInfoWrapper(fileSystem, new FileInfo(pathToTemplate)),
+                        new FileInfoWrapper(fileSystem, new FileInfo(pathToData)));
+    }
+    catch (Exception exception)
+    {
+        Console.Error.WriteLine(exception.Message);
+        Console.Error.WriteLine(exception.StackTrace);
+    }
+
 ## Stop code-generation
 
 If you decide that there are specific files that should not be subject
