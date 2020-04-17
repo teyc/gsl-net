@@ -27,7 +27,7 @@ namespace Gsl.Handlers
 
             if (line.StartsWith(". ", InvariantCulture))
             {
-                if (Regex.Match(line.Substring(1), "^[| ]+$").Success)
+                if (Regex.Match(line.Substring(1), "^[?| ]+$").Success)
                 {
                     _lineNumberOfLastAlignmentRule = lineNumber;
                     line = "." + line; // put the dot back in

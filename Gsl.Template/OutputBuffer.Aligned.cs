@@ -25,7 +25,7 @@ namespace Gsl
             {
                 formatString ??= CreateFormatString(widths);
                 var elements = Value.Split('\0').Cast<object>().ToArray();
-                ExpandedValue = string.Format(CultureInfo.InvariantCulture, formatString, elements);
+                ExpandedValue = string.Format(CultureInfo.InvariantCulture, formatString, elements).TrimEnd();
             }
 
             private static string CreateFormatString(int[] widths)
