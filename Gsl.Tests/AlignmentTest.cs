@@ -24,5 +24,14 @@ namespace Gsl.Tests
 
             TemplateWithSingleFileOutput(template, data);
         }
+
+        [Fact]
+        public void Optional()
+        {
+            const string template = "data/optional.gsl";
+            const string data = "data/optional.json";
+
+            TemplateWithSingleFileOutput(template, data);
+        }
     }
 }

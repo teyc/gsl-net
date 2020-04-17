@@ -70,6 +70,11 @@ namespace Gsl
             }
         }
 
+        internal string OptionalText(string input)
+        {
+            return input;
+        }
+
         public void DoNotOverwriteIf(string searchString, string fileExtension)
         {
             this.doNotOverwrite = (Search: searchString, FileExtension: fileExtension);
@@ -101,7 +106,7 @@ namespace Gsl
 
         internal string ExpandText(string input)
         {
-            return replaceText.Expand(input);
+            return replaceText.Replace(input);
         }
 
         internal void ReplaceText(string search, string replace)

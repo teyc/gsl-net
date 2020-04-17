@@ -6,21 +6,28 @@ namespace Gsl
 {
     public abstract class Token
     {
+        public readonly char Char;
+
         public string Value { get; }
 
         protected Token(string value)
         {
             Value = value;
+            Char = (value?.Length > 0) ? value[0] : Char.MaxValue;
         }
     }
 
     public class StringToken : Token
     {
-        public static readonly StringToken NULL = new StringToken("\0");
+        public static readonly StringToken ALIGN_LEFT = new StringToken("\0");
+
+        public static readonly StringToken OPTIONAL = new StringToken("\a");
 
         public StringToken(string value) : base(value?.Replace("\r", "") ?? throw new ArgumentNullException(nameof(value)))
         {
         }
+
+        public char Char => base.Char;
 
         public override bool Equals(object obj)
         {

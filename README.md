@@ -143,6 +143,27 @@ And the results look so much better:
         string SurName;   /* the family name or the surname of the contact, it may include hyphens */
         Date   dob;       /* date of birth                                                         */
 
+## Skipping the last comma in a loop
+
+Let's say you need to generate some SQL statements that look like
+
+    CREATE TABLE foo (
+        bar INTEGER NOT NULL,
+        baz INTEGER NOT NULL,
+        qux INTEGER NOT NULL
+    )
+
+Getting rid of the last comma is a common problem.
+
+To solve this, we introduce an optional directive `?`. If it occurs on a line, then the final optional character is left out.
+
+    CREATE TABLE foo (
+    .for (var i = 0; i < fields.length; i++) {
+    .                                ?
+        ${fields[i]} INTEGER NOT NULL,
+    .}
+    )
+
 ## Include File directive
 
 GSL files can be refactored and `include`d 

@@ -1,0 +1,7 @@
+. setOutput('foo.sql');
+CREATE TABLE foo (
+. for (var i = 0; i < fields.length; i++) {
+.                                ?
+    ${fields[i]} INTEGER NOT NULL,
+. }
+)

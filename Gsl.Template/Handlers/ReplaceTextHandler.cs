@@ -7,7 +7,7 @@ namespace Gsl.Handlers
     {
         private readonly List<(string Search, string Replace)> _defs = new List<(string Search, string Replace)>();
 
-        public string Expand(string input)
+        public string Replace(string input)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
