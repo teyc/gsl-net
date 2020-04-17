@@ -37,24 +37,7 @@ namespace Gsl
 
         private IFileInfo[] Execute(string template, string dataContents, string templatePath)
         {
-            var jsEngine = new Jint.Engine(options => {
-                    options.AllowClr();
-                    options.DebugMode();
-                })
-              .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
-              .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
-              .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
-              .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
-              .SetValue("camelCase", new Func<string, string>(StringFunctions.CamelCase))
-              .SetValue("output", new Action<object>(vm.WriteLine))
-              .SetValue("outputAligned", new Action<int, string>(vm.WriteLineAligned))
-              .SetValue("protect", new Action<string, string, string>(vm.WriteProtectedSection))
-              .SetValue("doNotOverwriteIf", new Action<string, string>(vm.DoNotOverwriteIf))
-              .SetValue("setOutput", new Action<string>(vm.SetOutput));
-
-            jsEngine
-              .SetValue("include", new Action<string>(
-                  relativePath => vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: relativePath)));
+            var jsEngine = BuildJintEngine();
 
             var data = new JsonParser(jsEngine).Parse(dataContents);
             foreach (var property in data.AsObject().GetOwnProperties())
@@ -67,17 +50,32 @@ namespace Gsl
             return vm.GetOutputFiles();
         }
 
-        public IFileInfo[] Execute(string template, IDictionary<string,object> data, string templatePath)
+        public IFileInfo[] Execute(string template, IDictionary<string, object> data, string templatePath)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
+            Jint.Engine jsEngine = BuildJintEngine();
+
+            foreach (var property in data)
+            {
+                jsEngine.SetValue(property.Key, property.Value);
+            }
+
+            vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: templatePath, templateContent: template);
+
+            return vm.GetOutputFiles();
+        }
+
+        private Jint.Engine BuildJintEngine()
+        {
             var jsEngine = new Jint.Engine(options =>
             {
                 options.AllowClr();
                 options.DebugMode();
             })
               .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
+              .SetValue("__optionalText", new Func<string, string>(vm.OptionalText))
               .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
               .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
               .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
@@ -92,14 +90,7 @@ namespace Gsl
               .SetValue("include", new Action<string>(
                   relativePath => vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: relativePath)));
 
-            foreach (var property in data)
-            {
-                jsEngine.SetValue(property.Key, property.Value);
-            }
-
-            vm.EvaluateTemplate(jsEngine: jsEngine, templatePath: templatePath, templateContent: template);
-
-            return vm.GetOutputFiles();
+            return jsEngine;
         }
     }
 }

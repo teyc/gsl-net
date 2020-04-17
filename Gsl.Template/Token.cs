@@ -41,6 +41,36 @@ namespace Gsl
         }
     }
 
+    public class OptionalToken : StringToken
+    {
+        public OptionalToken(string value) : base(value)
+        {
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is OptionalToken token &&
+                   base.Equals(obj) &&
+                   Value == token.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -159790080;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Value);
+            return hashCode;
+        }
+
+        public override string ToString()
+        {
+            var escaped = Value
+                .Replace("'", @"\'")
+                .Replace(@"\", @"\\");
+            return $"__optionalText('{escaped}')";
+        }
+    }
+
     public class ExpressionToken : Token
     {
         public ExpressionToken(string value) : base(value)

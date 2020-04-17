@@ -70,6 +70,11 @@ namespace Gsl
             }
         }
 
+        internal string OptionalText(string input)
+        {
+            return input;
+        }
+
         public void DoNotOverwriteIf(string searchString, string fileExtension)
         {
             this.doNotOverwrite = (Search: searchString, FileExtension: fileExtension);

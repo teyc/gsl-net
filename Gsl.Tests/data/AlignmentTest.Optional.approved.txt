@@ -1,5 +1,5 @@
 ﻿CREATE TABLE foo (
-    FirstName INTEGER NOT NULL,
-    LastName INTEGER NOT NULL,
+    FirstName INTEGER NOT NULL  ,
+    LastName INTEGER NOT NULL   ,
     DateOfBirth INTEGER NOT NULL
 )
