@@ -52,7 +52,7 @@ namespace Gsl.Tests.Infrastructure
                 StringToken.ALIGN_LEFT,
                 new StringToken("fghij"),
                 StringToken.OPTIONAL,
-                new OptionalToken("kl"),
+                new StringToken("kl"),
             }, tokens);
         }
 

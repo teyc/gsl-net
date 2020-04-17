@@ -108,12 +108,8 @@ namespace Gsl.Handlers
                 {
                     tokens.RemoveAt(tokens.Count - 1);
                     tokens.Add(StringToken.OPTIONAL);
-                    tokens.AddRange(TemplateParser.ParseInterpolatedString(substring).Select(ToOptional));
                 }
-                else
-                {
-                    tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
-                }
+                tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
                 tokens.Add(StringToken.ALIGN_LEFT);
                 startPos = endPos;
                 _logger.LogTrace("Tokens {tokens}", string.Join(":", tokens.Select(token => token.ToString())));
@@ -129,11 +125,5 @@ namespace Gsl.Handlers
                 : tokens.ToArray();
         }
 
-        private Token ToOptional(Token token)
-        {
-            return (token is StringToken stringToken)
-                    ? new OptionalToken(stringToken.Value)
-                    : token;
-        }
     }
 }
