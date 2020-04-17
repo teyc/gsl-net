@@ -1,15 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using Gsl.Infrastructure;
+using Microsoft.Extensions.Logging;
 using static System.StringComparison;
 
 namespace Gsl.Handlers
 {
+
     public class AlignHandler : IHandler
     {
-        private readonly Dictionary<int, int[]> _alignments = new Dictionary<int, int[]>();
+        private readonly Dictionary<int, Block[]> _alignments = new Dictionary<int, Block[]>();
         private readonly ILogger _logger;
         private int _lineNumberOfLastAlignmentRule = -1;
 
@@ -27,15 +29,33 @@ namespace Gsl.Handlers
 
             if (line.StartsWith(". ", InvariantCulture))
             {
-                if (Regex.Match(line.Substring(1), "^[| ]+$").Success)
+                if (Regex.Match(line.Substring(1), "^[?| ]+$").Success)
                 {
                     _lineNumberOfLastAlignmentRule = lineNumber;
                     line = "." + line; // put the dot back in
-                    _alignments[lineNumber] = line.Split('|')
-                        .SkipLast(1)
-                        .Select((s, index) => index == 0 ? s.Length - 1 : s.Length + 1)
-                        .ToArray();
-                    _logger.LogTrace("Alignments: {Alignments}", string.Join(",", _alignments[lineNumber]));
+                    var pos = 1;
+                    Block[] blocks = line.Split('?', '|')
+                                            .Select((s, index) => index == 0 ? s.Length - 1 : s.Length + 1)
+                                            .Select((width, index) =>
+                                            {
+                                                var splitChar = line.Substring(pos, width)[0];
+                                                _logger.LogTrace("Blocks `{substring}`", line.Substring(pos, width));
+                                                pos += width;
+                                                return splitChar == '?'
+                                                    ? Block.CreateOptionalBlock(width)
+                                                    : Block.CreateAlignmentBlock(width);
+                                            })
+                                            .ToArray();
+
+                    // sometimes the alignment line length is shorter than the template line length
+                    if (blocks.Length > 0)
+                    {
+                        blocks[blocks.Length - 1] = blocks[blocks.Length - 1].IsOptional
+                                                    ? Block.CreateOptionalBlock(5000)
+                                                    : Block.CreateAlignmentBlock(5000);
+                    }
+                    _alignments[lineNumber] = blocks;
+                    // _logger.LogTrace("Alignments: {Alignments}", string.Join(",", _alignments[lineNumber]));
                     return (true, "");
                 }
             }
@@ -79,17 +99,31 @@ namespace Gsl.Handlers
             using var scope = _logger.BeginScope(nameof(ParseInterpolatedStringWithAlignment));
             var tokens = new List<Token>();
             var startPos = 0;
-            foreach (var size in _alignments[alignmentId])
+            foreach (var block in _alignments[alignmentId])
             {
-                int endPos = startPos + size;
+                int endPos = Math.Min(startPos + block.Width, line.Length);
                 var substring = line.Substring(startPos, endPos - startPos);
+                _logger.LogInformation("{startPos}, {endPos} {substring}", startPos, endPos, substring);
+                if (block.IsOptional)
+                {
+                    tokens.RemoveAt(tokens.Count - 1);
+                    tokens.Add(StringToken.OPTIONAL);
+                }
                 tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
-                tokens.Add(StringToken.NULL);
+                tokens.Add(StringToken.ALIGN_LEFT);
                 startPos = endPos;
                 _logger.LogTrace("Tokens {tokens}", string.Join(":", tokens.Select(token => token.ToString())));
             }
-            tokens.AddRange(TemplateParser.ParseInterpolatedString(line.Substring(startPos)));
-            return tokens.ToArray();
+
+            if (startPos != line.Length)
+            {
+                tokens.AddRange(TemplateParser.ParseInterpolatedString(line.Substring(startPos)));
+            }
+
+            return tokens.LastOrDefault() == StringToken.ALIGN_LEFT
+                ? tokens.Take(tokens.Count - 1).ToArray()
+                : tokens.ToArray();
         }
+
     }
 }
