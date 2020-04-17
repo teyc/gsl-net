@@ -35,7 +35,7 @@ namespace Gsl
 
         public void Close()
         {
-            var alignmentGroups = _lines.OfType<Aligned>().GroupBy(l => l.AlignmentId).ToArray();
+            var alignmentGroups = _lines.OfType<Aligned>().GroupBy(l => l.AlignmentId);
             foreach (var alignmentGroup in alignmentGroups)
             {
                 Aligned.Expand(alignmentGroup);
