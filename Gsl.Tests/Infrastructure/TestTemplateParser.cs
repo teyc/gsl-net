@@ -28,9 +28,9 @@ namespace Gsl.Tests.Infrastructure
             var tokens = handler.ParseInterpolatedStringWithAlignment(1, lines[1]);
             Assert.Equal(new[] {
                 new StringToken("abcde"),
-                StringToken.NULL,
+                StringToken.ALIGN_LEFT,
                 new StringToken("fghij"),
-                StringToken.NULL,
+                StringToken.ALIGN_LEFT,
                 new StringToken("kl"),
             }, tokens);
         }
@@ -49,9 +49,9 @@ namespace Gsl.Tests.Infrastructure
             var tokens = handler.ParseInterpolatedStringWithAlignment(1, lines[1]);
             Assert.Equal(new[] {
                 new StringToken("abcde"),
-                StringToken.NULL,
+                StringToken.ALIGN_LEFT,
                 new StringToken("fghij"),
-                StringToken.NULL,
+                StringToken.OPTIONAL,
                 new OptionalToken("kl"),
             }, tokens);
         }

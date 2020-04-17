@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Gsl.Infrastructure;
+using System;
 
 namespace Gsl
 {
     public partial class OutputBuffer
     {
-        internal class Aligned: IOutputBufferElement
+        internal class Aligned : IOutputBufferElement
         {
             public Aligned(int alignmentId, string value)
             {
@@ -21,10 +22,25 @@ namespace Gsl
 
             public string ExpandedValue { get; private set; }
 
-            public void ExpandAlignment(int[] widths, string formatString = null)
+            public void ExpandAlignment(int[] widths, string formatString, bool isLastItem)
             {
                 formatString ??= CreateFormatString(widths);
-                var elements = Value.Split('\0').Cast<object>().ToArray();
+                var elements = Value
+                                .Split(StringToken.ALIGN_LEFT.Char)
+                                .SelectMany(s =>
+                                {
+                                    var parts = s.Split(StringToken.OPTIONAL.Char);
+                                    if (isLastItem)
+                                    {
+                                        // clear out all but the first
+                                        for (var i = 1; i < parts.Length; i++)
+                                        {
+                                            parts[i] = "";
+                                        }
+                                    }
+                                    return parts;
+                                })
+                                .Cast<object>().ToArray();
                 ExpandedValue = string.Format(CultureInfo.InvariantCulture, formatString, elements).TrimEnd();
             }
 
@@ -36,7 +52,7 @@ namespace Gsl
 
             public static void Expand(IEnumerable<Aligned> items)
             {
-                var widths = items.Select(item => item.Value.Split('\0').Select(s => s.Length))
+                var widths = items.Select(item => item.Value.Split(StringToken.OPTIONAL.Char, StringToken.ALIGN_LEFT.Char).Select(s => s.Length))
                                   .Transpose()
                                   .Select(widths => widths.Max())
                                   .ToArray();
@@ -44,7 +60,7 @@ namespace Gsl
                 var formatString = CreateFormatString(widths.ToArray());
                 foreach (var item in items)
                 {
-                    item.ExpandAlignment(widths, formatString);
+                    item.ExpandAlignment(widths, formatString, isLastItem: item == items.Last());
                 }
             }
         }

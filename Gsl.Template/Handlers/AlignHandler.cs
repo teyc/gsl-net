@@ -106,13 +106,15 @@ namespace Gsl.Handlers
                 _logger.LogInformation("{startPos}, {endPos} {substring}", startPos, endPos, substring);
                 if (block.IsOptional)
                 {
+                    tokens.RemoveAt(tokens.Count - 1);
+                    tokens.Add(StringToken.OPTIONAL);
                     tokens.AddRange(TemplateParser.ParseInterpolatedString(substring).Select(ToOptional));
                 }
                 else
                 {
                     tokens.AddRange(TemplateParser.ParseInterpolatedString(substring));
                 }
-                tokens.Add(StringToken.NULL);
+                tokens.Add(StringToken.ALIGN_LEFT);
                 startPos = endPos;
                 _logger.LogTrace("Tokens {tokens}", string.Join(":", tokens.Select(token => token.ToString())));
             }
@@ -122,7 +124,7 @@ namespace Gsl.Handlers
                 tokens.AddRange(TemplateParser.ParseInterpolatedString(line.Substring(startPos)));
             }
 
-            return tokens.LastOrDefault() == StringToken.NULL
+            return tokens.LastOrDefault() == StringToken.ALIGN_LEFT
                 ? tokens.Take(tokens.Count - 1).ToArray()
                 : tokens.ToArray();
         }

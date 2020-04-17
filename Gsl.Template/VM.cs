@@ -106,7 +106,7 @@ namespace Gsl
 
         internal string ExpandText(string input)
         {
-            return replaceText.Expand(input);
+            return replaceText.Replace(input);
         }
 
         internal void ReplaceText(string search, string replace)

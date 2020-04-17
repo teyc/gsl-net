@@ -75,7 +75,6 @@ namespace Gsl
                 options.DebugMode();
             })
               .SetValue("__expandText", new Func<string, string>(vm.ExpandText))
-              .SetValue("__optionalText", new Func<string, string>(vm.OptionalText))
               .SetValue("replaceText", new Action<string, string>(vm.ReplaceText))
               .SetValue("log", new Action<object>(line => logger.LogInformation("log: " + line)))
               .SetValue("kebabCase", new Func<string, string>(StringFunctions.KebabCase))
